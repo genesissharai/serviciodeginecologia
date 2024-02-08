@@ -25,7 +25,6 @@ return new class extends Migration
             $table->time('end_hour')->nullable(); //If null it will end 30 min after start
             $table->string("status")->nullable();
             $table->longText('notes')->nullable();
-            $table->integer('status');
             $table->timestamps();
         });
 
