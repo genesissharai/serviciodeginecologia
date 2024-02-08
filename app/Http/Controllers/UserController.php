@@ -99,9 +99,9 @@ class UserController extends Controller
 
             event(new Registered($user));
 
-            Auth::login($user);
+            //Auth::login($user);
 
-            return redirect(RouteServiceProvider::HOME);
+            return redirect('/');
         }catch(\Exception $e){
             \Log::info($e);
             return redirect()->back()->withErrors(["error" => "Algo ha fallado"]);
