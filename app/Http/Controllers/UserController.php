@@ -60,14 +60,12 @@ class UserController extends Controller
                         ->where('rol', $userRol ??'');
                     });
 
-        \Log::info($uniqueEmailRule);
-        \Log::info($uniqueCiRule);
-
 
         $validationRules = [
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:255'],
+            'birthdate' => ['required', 'date'],
             'email' => ['required', 'string', 'email', 'max:255', $uniqueEmailRule],
             'ci' => ['required', 'numeric', $uniqueCiRule],
             'password' => ['required', Rules\Password::defaults()],
@@ -84,6 +82,7 @@ class UserController extends Controller
                 'ci' => $request->ci_type.$request->ci,
                 'rol' => $userRol,
                 'email' => $request->email,
+                'birthdate' => $request->birthdate,
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
             ]);
