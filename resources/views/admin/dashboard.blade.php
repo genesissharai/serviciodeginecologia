@@ -4,7 +4,7 @@
 
     <div class="row">
         <!-- Agendar citas -->
-        <a href="{{url('dashboard')}}" class="col-12 col-xl-3 col-md-6 mb-4">
+        <a href="{{url('/agendarCita')}}" class="col-12 col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -37,7 +37,7 @@
         </a>
 
         <!-- Agendar horario disponible doctor -->
-        <a href="{{url('dashboard')}}" class="col-12 col-xl-3 col-md-6 mb-4">
+        <a href="{{url('/agendarDisponibilidad')}}" class="col-12 col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('/');
 
 Route::get('/dashboard', function () {
     return view('admin.dashboard', ['title' => 'Dashboard']);
