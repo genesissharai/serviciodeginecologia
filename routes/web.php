@@ -3,6 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\MorbilidadController;
+
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +46,9 @@ Route::get('/loginPatient', function(){
 Route::get('/loginSecretary', function(){
     return view('admin.login',["loginType" => "loginSecretary", "registerType" => "registerSecretary"]);
 })->name('loginSecretary');
+Route::get('/registrarmorbilidad', function () {
+    return view('morbilidad.registrar', ['title' => 'Morbilidad']);
+});
 
 Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
@@ -51,6 +57,8 @@ Route::post('/loginPatient',[LoginController::class,'loginPatient']);
 Route::post('/loginDoctor',[LoginController::class,'loginDoctor']);
 Route::post('/loginSecretary',[LoginController::class,'loginSecretary']);
 Route::post('/loginAdmin',[LoginController::class,'loginAdmin']);
+Route::post('/registrarmorbilidad',[MorbilidadController::class, 'RegistrarMorbi']);
+
 
 //require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
