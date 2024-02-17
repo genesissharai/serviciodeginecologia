@@ -14,12 +14,12 @@
     <!-- Custom fonts for this template-->
     <link href="{{Vite::asset('resources/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="{{Vite::asset('resources/scss/sb-admin-2.scss')}}" rel="stylesheet">
-
+    @vite(['resources/js/app.js'])
 </head>
 
 <body id="page-top">
@@ -66,7 +66,7 @@
                 <div id="collapseConsultations" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
-                        <a class="collapse-item" href="{{url('/disponibilidadDoctor')}}">Disponibilidad doctor</a>
+                        <a class="collapse-item" href="{{url('/agendarDisponibilidad')}}">Disponibilidad doctor</a>
                         <a class="collapse-item" href="{{url('/agendarCitasAdmin')}}">Agendar citas</a>
                     </div>
                 </div>
@@ -253,7 +253,10 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                @php
+                                    $user = \Auth::user();
+                                @endphp
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{$user->name}} {{$user->last_name}}</span>
                                 <img class="img-profile rounded-circle"
                                     src="{{Vite::asset('resources/img/undraw_profile.svg')}}">
                             </a>
@@ -343,15 +346,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{Vite::asset('resources/vendor/jquery/jquery.min.js')}}"></script>
-    <script src="{{Vite::asset('resources/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="{{Vite::asset('resources/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="{{Vite::asset('resources/js/sb-admin-2.min.js')}}"></script>
 
 </body>
 

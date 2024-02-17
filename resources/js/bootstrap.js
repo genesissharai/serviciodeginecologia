@@ -11,6 +11,7 @@ import axios from 'axios';
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.withCredentials = true;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -33,3 +34,15 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });
+
+import $ from 'jquery';
+window.jQuery = window.$ = $;
+
+
+import * as Popper from '@popperjs/core'
+window.Popper = Popper
+import 'bootstrap'
+
+import swal from 'sweetalert';
+
+window.swal = swal

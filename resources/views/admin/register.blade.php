@@ -50,7 +50,7 @@
                                     </ul>
                                 </div>
                             @endif
-                            <form class="user" method="POST" action="{{url("/$registerType")}}" target="_blank">
+                            <form class="user" method="POST" action="{{url("/$registerType")}}" >
                                 {{ csrf_field() }}
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
