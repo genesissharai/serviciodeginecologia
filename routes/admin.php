@@ -49,6 +49,14 @@ Route::post('/registerPatient', [UserController::class, 'registerPatient']);
 Route::post('/registerSecretary', [UserController::class, 'registerSecretary']);
 
 
+/**
+ *
+ * Usuarios
+ *
+  */
+
+
+
 
 /******
  *
@@ -57,7 +65,7 @@ Route::post('/registerSecretary', [UserController::class, 'registerSecretary']);
  */
 
 Route::get('/agendarDisponibilidad',[CitasController::class, 'selectDoctorForAvailabilityPlanning'])
-    ->middleware(['auth'])->name('selectDoctorForAvailabilityPlanning');
+->middleware(['auth'])->name('selectDoctorForAvailabilityPlanning');
 
 Route::get('/agendarDisponibilidad/{id}',[CitasController::class, 'availabilityPlanning'])
     ->middleware(['auth'])->name('availabilityPlanning');
@@ -68,14 +76,19 @@ Route::post('/agendarDisponibilidad/{id}',[CitasController::class, 'scheduleAvai
 Route::get('/disponibilidadDoctor/{id}',[CitasController::class, 'getDoctorAvailability'])
     ->middleware(['auth'])->name('getDoctorAvailability');
 
-Route::get('/citasPaciente/{id}',[CitasController::class, 'getPatientSchedules'])
+Route::get('/citasPaciente',[CitasController::class, 'getPatientSchedules'])
     ->middleware(['auth'])->name('getPatientSchedules');
 
 Route::get('/agendarCita',[CitasController::class, 'selectDoctorDateScheduling'])
     ->middleware(['auth'])->name('selectDoctorDateScheduling');
 
-Route::get('/agendarCita/{id}',[CitasController::class, 'dateScheduling'])
+    Route::get('/agendarCita/{id}',[CitasController::class, 'dateScheduling'])
     ->middleware(['auth'])->name('dateScheduling');
 
 Route::post('/agendarCita/{id}',[CitasController::class, 'scheduleConsultation'])
-    ->middleware(['auth'])->name('scheduleConsultation');
+->middleware(['auth'])->name('scheduleConsultation');
+
+Route::get('/buscarPaciente', [CitasController::class, 'searchPatients'])->middleware(['auth']);
+
+Route::delete('/cancelarCita', [CitasController::class, 'cancelSchedule'])->middleware(['auth']);
+

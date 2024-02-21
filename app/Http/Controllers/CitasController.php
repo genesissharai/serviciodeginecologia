@@ -48,7 +48,7 @@ class CitasController extends Controller
             return redirect()->back()->withErrors([1 => "Usuario seleccionado no es médico"]);
         }
         return view('admin.citas.agendar-cita', [
-            'title' => "Agendar Disponibilidad de medico",
+            'title' => "Agendar cita",
             'doctorId' => $doctor->id,
         ]);
     }
@@ -179,16 +179,48 @@ class CitasController extends Controller
     public function getPatientSchedules(Request $request){
 
         $now = new \Carbon\Carbon();
+
+        $user = \Auth::user();
+
         $schedules = $patientSchedule = MedicalConsultation::
-        where('patient_id', $request->id)
-        ->where('doctor_id', $request->id_doctor)
+        where('doctor_id', $request->id_doctor)
+        ->when($user->rol == "PATIENT", function($q){
+            $q->where('patient_id', $request->id);
+        })
         ->where('date', ">=", $now->toDateString())
         ->where('status', strtoupper("pending"))->get();
         foreach($schedules as $schedule){
             $date = (new \Carbon\Carbon($schedule->date));
-            $schedule->title = "Cita: ". $date->hour.":".$date->minute;
+            $schedule->title = "Cita: ". $date->toTimeString();
+            $schedule->fullName = $schedule->patient->fullName();
+            $schedule->type = "Cita";
+            $schedule->_id = $schedule->id;
         }
         return $schedules;
 
+    }
+
+    public function searchPatients(Request $request){
+
+        $users = User::
+        where('rol', strtoupper('patient'))
+        ->where(function($q) use($request){
+            $q->where('name', 'like', "%".$request->search."%")
+            ->orWhere('last_name', 'like', "%".$request->search."%")
+            ->orWhere('ci', 'like', "%".$request->search."%");
+        })
+        ->get();
+
+        return $users;
+    }
+
+    public function cancelSchedule(Request $request) {
+
+        $schedule = MedicalConsultation::find($request->id);
+
+        $schedule->status = strtoupper('canceled');
+        $schedule->save();
+
+        return ["success" => true];
     }
 }

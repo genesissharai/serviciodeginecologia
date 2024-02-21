@@ -67,7 +67,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
                         <a class="collapse-item" href="{{url('/agendarDisponibilidad')}}">Disponibilidad doctor</a>
-                        <a class="collapse-item" href="{{url('/agendarCitasAdmin')}}">Agendar citas</a>
+                        <a class="collapse-item"  href="{{url('/agendarCita')}}">Agendar citas</a>
                     </div>
                 </div>
             </li>

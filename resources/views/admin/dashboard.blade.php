@@ -63,16 +63,50 @@
             <div class="card-body">
                 <div class="container">
                     <div class="row">
-                        <div class="col-10">
-                            No hay citas disponibles...
-                        </div>
-                        <div class="col-2">
-                            <a href="#" class="btn btn-primary btn-icon-split">
-                                <span class="icon text-white-50">
-                                    <i class="fas fa-flag"></i>
-                                </span>
-                                <span class="text">Agendar</span>
-                            </a>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <th>
+                                        Fecha
+                                    </th>
+                                    <th>
+                                        Paciente
+                                    </th>
+                                    <th>
+                                        Medico
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                </thead>
+                                @forelse ($nextSchedules as $schedule)
+                                    <tr>
+                                        <td colspan="">{{ \Carbon\Carbon::parse($schedule->date)->toDayDateTimeString() }}</td>
+                                        <td colspan="">{{$schedule->patient->fullName()}}</td>
+                                        <td colspan="">{{$schedule->doctor->fullName()}}</td>
+                                        <td colspan="">
+                                            <form id="cancelarCita-{{$schedule->id}}" data-id={{$schedule->id}} action="/cancelarCita" method="POST">
+                                                @method('DELETE')
+                                                @csrf
+                                                <input type="text" hidden value={{$schedule->id}}>
+                                                <button type="button" class="btn btn-danger btnCancelarCita" data-id={{$schedule->id}}  id="btnCancelarCita-{{$schedule->id}}">Cancelar</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <td colspan="">No hay citas disponibles...</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <a href="{{url('/agendarCita')}}" class="btn btn-primary btn-icon-split">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-flag"></i>
+                                            </span>
+                                            <span class="text">Agendar</span>
+                                        </a>
+                                    </td>
+                                @endforelse
+                            </table>
                         </div>
                     </div>
                 </div>

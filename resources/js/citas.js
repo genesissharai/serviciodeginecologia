@@ -1,7 +1,7 @@
 'use strict'
 
 import { Calendar } from '@fullcalendar/core';
-
+import { debounce } from 'lodash';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
@@ -9,7 +9,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import momentPlugin from '@fullcalendar/moment';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
 import moment from 'moment/moment';
-import axios from 'axios';
+import axios, { Axios } from 'axios';
 import swal from 'sweetalert';
 
 let calendarEl = document.getElementById('calendar');
@@ -32,6 +32,32 @@ function removeEventById(jsEvent){
    calendarEvent.remove();
 }
 
+function removeScheduleById(id){
+    return swal({
+        title: "Cancelar cita",
+        text: "¿Esta seguro de que desea cancelar la cita?",
+        icon: "warning",
+        buttons: ["No","SI"],
+        dangerMode: true,
+      })
+      .then((cancelar)=>{
+        if(cancelar){
+            let csrfToken = document.getElementById("csrfToken").value;
+
+            axios.delete("/cancelarCita",
+            { data: {id},
+            headers:{
+                'X-CSRF-TOKEN': csrfToken
+            }
+            }).then((data) => {
+                if(data.data.success) swal("Cita cancelada")
+                return calendar.refetchEvents();
+            }).catch(_ => genericError())
+
+        }
+      }).catch(console.log);
+}
+
 let buttonRemoveEvent = () => `
 <button class="btn btn-circle btn-danger"
     style="position: absolute;z-index:2;top: 0;right: 0;/* margin: -7px -7px; */width: 15px;h;height: 15px;font-size: 13px;padding: 0;">
@@ -44,6 +70,34 @@ function logEvents(){
     console.log(events);
 }
 
+
+const searchPatient = debounce((search) => {
+    axios.get('/buscarPaciente',{ params: { search } })
+    .then((response) => {
+        const listaUsuarios = document.getElementById("listaUsuarios");
+        listaUsuarios.innerHTML = "";
+        response.data.forEach( user => {
+            let button = document.createElement('button');
+            button.className = "list-group-item list-group-item-action";
+            button.id = "selectUser-"+user.id
+            button.type = 'button';
+            button.innerText = `${user.name} ${user.last_name} - CI ${user.ci}`
+            button.addEventListener("click", () => {selectPatient(user)});
+            listaUsuarios.appendChild(button);
+
+        });
+    });
+},250);
+
+
+function selectPatient(user){
+    document.getElementById("selectedPatient").value = user.id;
+    document.getElementById("listaUsuarios").innerHTML = "";
+    document.getElementById("nombrePaciente").innerText = `${user.name} ${user.last_name} - CI ${user.ci}`;
+
+}
+
+// guardar fecha disponible
 function saveAvailabilityData(){
     let idDoctor = document.getElementById("selectedDoctor").value;
     let csrfToken = document.getElementById("csrfToken").value;
@@ -70,33 +124,7 @@ function saveAvailabilityData(){
     }).catch(console.log);
 }
 
-function saveScheduleData(){
-    let idPatient = document.getElementById("selectedPatient").value;
-    let idDoctor = document.getElementById("selectedDoctor").value;
-    let csrfToken = document.getElementById("csrfToken").value;
-    let newEvents = calendar.getEvents().filter(val => val.extendedProps.isNew).map((val) => {
-        return {
-            doctor_id: idDoctor,
-            patient_id: idPatient,
-            date: moment(val.start).format("YYYY-MM-DD")
-        }
-    });
-
-    axios.post('/agendarDisponibilidad/'+idDoctor,{
-        id:idDoctor,
-        eliminados,
-        newEvents
-    },
-    {headers:{
-        'X-CSRF-TOKEN': csrfToken
-    }}).then((data) => {
-        let result = data.data;
-        if(result.success){
-            location.reload();
-        }
-    }).catch(console.log);
-}
-
+// calendario disponibilidad
 function doctorAvailabilityCalendar(){
     return new Calendar(calendarEl, {
         plugins: [ timeGridPlugin, interactionPlugin, momentPlugin, bootstrapPlugin, dayGridPlugin ],
@@ -148,6 +176,8 @@ function doctorAvailabilityCalendar(){
       });
 }
 
+
+//calendario agendar citas
 function scheduleDate(){
     return new Calendar(calendarEl, {
         plugins: [ timeGridPlugin, interactionPlugin, momentPlugin, bootstrapPlugin, dayGridPlugin ],
@@ -168,10 +198,12 @@ function scheduleDate(){
 
           {
             url: '/disponibilidadDoctor/'+document.getElementById("selectedDoctor").value,
+            id: "disponibilidad"
           },
           {
-            url: '/citasPaciente/'+document.getElementById("selectedPatient").value + "?id_doctor=" +document.getElementById("selectedDoctor").value,
-          },
+            url: '/citasPaciente' + "?id_doctor=" +document.getElementById("selectedDoctor").value,
+            id: "citas"
+          }
 
 
         ],
@@ -198,7 +230,9 @@ function scheduleDate(){
                 let idPatient = document.getElementById("selectedPatient").value;
                 let idDoctor = document.getElementById("selectedDoctor").value;
                 let csrfToken = document.getElementById("csrfToken").value;
-
+                if(!idPatient){
+                   return swal("No ha seleccionado al paciente.")
+                }
                 axios.post('/agendarCita/'+idDoctor,{
                     idPatient: idPatient,
                     date: moment(selectionInfo.start).format("YYYY-MM-DD ") + "07:30:00"
@@ -207,43 +241,60 @@ function scheduleDate(){
                     'X-CSRF-TOKEN': csrfToken
                 }}).then((data) => {
                     let result = data.data;
+                    calendar.refetchEvents();
                     if(!result.success){
                         swal({text: result.error}).then((res) => {
                             if(result.errorCode == 2){
-                                location.reload()
+                                return location.reload();
+                            }
+                            if(result.errorCode == 3){
+                                return location.reload();
                             }
                         })
                     }
                     else{
                         swal({text: result.message})
-                        /* this.addEvent({
-                        start: selectionInfo.start,
-                        end: selectionInfo.end,
-                        // title: 'Disponible',
-                        id: moment().valueOf(),
-                        isNew: true,
-                        userId: document.getElementById("userId").value
-                        //display: 'background',
-                        }); */
                     }
-                }).catch(console.log);
+                }).catch(_ => genericError());
             }
           });
 
 
         },
 
+        eventDidMount: function({event,el}){
+
+            if(el && event.extendedProps.type == "Cita" && moment().isSameOrBefore(event.start,"day")){
+                // console.log({event, el})
+                let button = document.createElement('span');
+                button.innerHTML = buttonRemoveEvent()
+                button.eventId = event.id;
+                button.addEventListener("click", () => { removeScheduleById(event.extendedProps._id) })
+                el.append(button)
+
+                let tooltip = new tooltip(el, {
+                title: info.event.extendedProps.fullName,
+                placement: 'top',
+                trigger: 'hover',
+                container: 'body'
+                });
+            }
+        }
+
 
       });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    let calendarType = document.getElementById("calendarType").value;
+    let calendarType = document.getElementById("calendarType");
     const saveButtons = [...document.getElementsByClassName("saveCalendarData")]
-
     // document.getElementById("logEvents").addEventListener("click", logEvents);
 
-    if(calendarType === "doctorAvailability"){
+    let user = JSON.parse(document.getElementById("user").value)
+
+    if(!calendarType) return;
+
+    if(calendarType.value === "doctorAvailability"){
         calendar = doctorAvailabilityCalendar();
         for (let item of saveButtons) {
             item.addEventListener("click", ()=>{
@@ -251,11 +302,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-    if(calendarType === "scheduleDate"){
+    if(calendarType.value === "scheduleDate"){
         calendar = scheduleDate();
+        const search = document.getElementById("buscadorPaciente");
+        const searchButton = document.getElementById("searchButton");
+        if(search && searchButton) {
+            searchButton.addEventListener("click",() => {searchPatient(search.value)});
+        }
+
+
 
     }
     if(calendar.render)
         calendar.render();
   });
+
 

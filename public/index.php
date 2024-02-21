@@ -46,6 +46,10 @@ require __DIR__.'/../vendor/autoload.php';
 
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
+// setlocale(LC_TIME, 'es_ES');
+// \Carbon\Carbon::setLocale('es');
+
+
 $kernel = $app->make(Kernel::class);
 
 $response = $kernel->handle(
@@ -53,3 +57,4 @@ $response = $kernel->handle(
 )->send();
 
 $kernel->terminate($request, $response);
+

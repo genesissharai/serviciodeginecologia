@@ -10,34 +10,40 @@
             <div class="mb-3">
 
                 <input type="text" hidden id="csrfToken" value="{{ csrf_token() }}" >
-                <input type="text" hidden id="userId" value="{{\Auth::id()}}" >
+                <input type="text" hidden id="user" value="{{\Auth::user()}}" >
                 <input type="text" hidden id="calendarType" value="scheduleDate" >
                 <input type="text" hidden id="selectedDoctor" value="{{$doctorId}}" >
                 @if(\Auth::user()->rol == "PATIENT")
                     <input type="text" hidden id="selectedPatient" value="{{$patientId}}" >
                 @else
-                    <input type="text" hidden id="selectedPatient" value="4" >
+                    <input type="text" hidden id="selectedPatient" value="">
+                    <h4>Buscar paciente:</h4>
                     <div class="input-group">
-                        <input type="text" id="Buscador" class="form-control bg-light border-0 small" placeholder="Ingrese el nombre o la identificacion del paciente..."
+                        <input type="text" id="buscadorPaciente" class="form-control bg-light border-0 small" placeholder="Ingrese el nombre o la identificacion del paciente..."
                             aria-label="Search" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
+                            <button class="btn btn-primary" type="button" id="searchButton">
                                 <i class="fas fa-search fa-sm"></i>
                             </button>
                         </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="list-group w-100" id="listaUsuarios">
+
+                            </div>
+                        </div>
+                    </div>
                 @endif
-                <button type="button" class="btn btn-primary saveCalendarData">Guardar</button>
 
             </div>
 
             <br>
+            <h2>Paciente: <span id="nombrePaciente"></span></h2>
             <div id="calendar"></div>
         </div>
-        <div class="card-body">
-            {{-- <button type="button" class="btn btn-primary" id="logEvents">Log events</button> --}}
-            {{-- <button type="button" class="btn btn-primary saveCalendarData">Guardar</button> --}}
-        </div>
+
     </div>
 </div>
 

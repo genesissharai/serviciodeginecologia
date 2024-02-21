@@ -106,4 +106,8 @@ class UserController extends Controller
             return redirect()->back()->withErrors(["error" => "Algo ha fallado"]);
         }
     }
+
+
+
+
 }
