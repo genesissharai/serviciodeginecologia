@@ -65,7 +65,7 @@
                                         </div>
                                         <div class="form-group">
                                             <input type="int" class="form-control form-control-user" name="ev_x_fur"
-                                                id="ev_x_fur" placeholder="Edad gestacion por FUR">
+                                                id="ev_x_fur" placeholder="Edad gestacional por FUR">
                                         </div>
                                         <div class="form-group">
                                             <input type="date" class="form-control form-control-user" name="first_eco"
@@ -96,7 +96,7 @@
                                          <hr>
                     
                                         <button type="submit"  class="btn btn-primary btn-user btn-block">
-                                            Iniciar sesion
+                                            Registrar Morbilidad
                                         
                                      </button>
                                     </form>
@@ -119,6 +119,7 @@
         </div>
 
     </div>
+        
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{Vite::asset('resources/vendor/jquery/jquery.min.js')}}"></script>

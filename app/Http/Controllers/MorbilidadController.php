@@ -38,12 +38,55 @@ class MorbilidadController extends Controller
             'conduct'=>$request->conduct,
 
         ]);
-
-        echo("=>Registrado");
         
-
+        return redirect()->intended('/registrarmorbilidad');
 
      }
 
+     public function consultarMorbi(Request $request)
+     {
+        $morbidities = Morbidity::orderBy('id','desc')->paginate();
+
+        //Return $morbidities;
+
+        $contador = 1;
+        
+        return view('/morbilidad.consultar',['title' => 'Morbilidad'],compact('morbidities', 'contador'));
+
+     }
+
+     public function editarMorbi($id)
+     {
+
+      $morbidities = Morbidity::find($id);
+
+      return view('/morbilidad.edit',['title' => 'Morbilidad'],compact('morbidities'));
+     }
+
+     public function update($id, Request $request)
+     {
+      $morbidities = Morbidity::find($id);
+      $morbidities->name = $request->name;
+      $morbidities->last_name = $request->last_name;
+      $morbidities->ci = $request->ci;
+      $morbidities->age=$request->fn;
+      $morbidities->pregnancies=$request->pregnancies;
+      $morbidities->fvr=$request->fvr;
+      $morbidities->ev_x_fur=$request->ev_x_fur;
+      $morbidities->first_eco=$request->first_eco;
+      $morbidities->eg_x_eco=$request->eg_x_eco;
+      $morbidities->ta=$request->ta;
+      $morbidities->au=$request->au;
+      $morbidities->physical_exam=$request->physical_exam;
+      $morbidities->conduct=$request->conduct;
+      $morbidities->save();
+     }
+
+     public function destroy($id)
+     {
+
+      $morbidities = Morbidity::find($id);
+      $morbidities->delete();
+     }
 
 }

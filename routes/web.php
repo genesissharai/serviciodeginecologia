@@ -49,8 +49,21 @@ Route::get('/loginSecretary', function(){
 Route::get('/registrarmorbilidad', function () {
     return view('morbilidad.registrar', ['title' => 'Morbilidad']);
 });
+Route::get('/registrarnoticias', function () {
+    return view('noticia.registrar', ['title' => 'Morbilidad']);
+});
 
-Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+Route::get('/consultarmorbilidad',[MorbilidadController::class, 'consultarMorbi']);
+Route::get('/editmorbidity/{id}',[MorbilidadController::class, 'editarMorbi']);
+Route::put('/editmorbidity/{id}',[MorbilidadController::class, 'update']);
+Route::delete('/deletemorby/{id}',[MorbilidadController::class, 'destroy']);
+
+//Route::get('/consultarmorbilidad', function () {
+  //  return view('morbilidad.consultar', ['title' => 'Morbilidad']);
+//});
+
+
+Route::put('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 
 Route::post('/loginPatient',[LoginController::class,'loginPatient']);

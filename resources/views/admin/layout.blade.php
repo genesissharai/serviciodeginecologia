@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <base href="localhost/serviciodeginecologia/public/">
 
     <title>Hospital Raúl Leoni - Blank</title>
 
@@ -81,10 +82,40 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
                         <a class="collapse-item" href="{{url('/registrarmorbilidad')}}">Registrar morbilidad</a>
-                        <a class="collapse-item" href="{{url('/agendarCitasAdmin')}}">Consultar morbilidad</a>
-                        <a class="collapse-item" href="{{url('/agendarCitasAdmin')}}">Modificar morbilidad</a>
+                        <a class="collapse-item" href="{{url('/consultarmorbilidad')}}">Consultar morbilidad</a>
                     </div>
                 </div>
+                
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConsultations"
+                    aria-expanded="true" aria-controls="collapseConsultations">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Noticias</span>
+                </a>
+                <div id="collapseConsultations" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
+                        <a class="collapse-item" href="{{url('/registrarnoticias')}}">Registrar noticias</a>
+                        <a class="collapse-item" href="{{url('/consultarmorbilidad')}}">Consultar noticias</a>
+                    </div>
+                </div>
+                
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConsultations"
+                    aria-expanded="true" aria-controls="collapseConsultations">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Eventos</span>
+                </a>
+                <div id="collapseConsultations" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
+                        <a class="collapse-item" href="{{url('/registrarmorbilidad')}}">Registrar Eventos</a>
+                        <a class="collapse-item" href="{{url('/consultarmorbilidad')}}">Consultar Eventos</a>
+                    </div>
+                </div>
+                
             </li>
 
         </ul>
