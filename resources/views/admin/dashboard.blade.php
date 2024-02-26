@@ -95,7 +95,7 @@
                                                     @method('DELETE')
                                                     @csrf
                                                     <input type="text" hidden value={{$schedule->id}}>
-                                                    <button type="button" class="btn btn-danger btnCancelarCita" data-id={{$schedule->id}}  id="btnCancelarCita-{{$schedule->id}}">Cancelar</button>
+                                                    <button type="button" class="btn btn-danger btnCancelarCita" data-id={{$schedule->id}} id="btnCancelarCita-{{$schedule->id}}" value="btnCancelarCita-{{$schedule->id}}">Cancelar</button>
                                                 </form>
                                             </td>
                                     </tr>

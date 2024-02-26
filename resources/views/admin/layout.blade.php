@@ -85,7 +85,7 @@
                         <a class="collapse-item" href="{{url('/consultarmorbilidad')}}">Consultar morbilidad</a>
                     </div>
                 </div>
-                
+
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConsultations"
@@ -100,7 +100,7 @@
                         <a class="collapse-item" href="{{url('/consultarmorbilidad')}}">Consultar noticias</a>
                     </div>
                 </div>
-                
+
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConsultations"
@@ -115,7 +115,7 @@
                         <a class="collapse-item" href="{{url('/consultarmorbilidad')}}">Consultar Eventos</a>
                     </div>
                 </div>
-                
+
             </li>
 
         </ul>
@@ -385,7 +385,8 @@
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
                     <form action="{{url('logout')}}" method="POST">
                         @csrf
-                        <button type="submit" class="btn btn-primary">Salir</button>
+                        @method('PUT')
+                        <button type="submit" value="logout" class="btn btn-primary">Salir</button>
                     </form>
                 </div>
             </div>

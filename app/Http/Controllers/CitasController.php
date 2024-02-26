@@ -14,8 +14,13 @@ class CitasController extends Controller
 
 
     public function selectDoctorForAvailabilityPlanning(Request $request){
+        // SI ES PACIENTE NEGARLE PERMISOS
         if(\Auth::user()->rol == "PATIENT"){
             return redirect('/forbidden');
+        }
+        // SI ES DOCTOR ENTRAR DIRECTAMENTE A AGENDAR DISPONIBILIDAD
+        if(\Auth::user()->rol == "DOCTOR" ){
+            return redirect(url('/agendarDisponibilidad/'.\Auth::id()));
         }
         $doctor = User::find($request->id);
         $doctor_list = User::where('rol','DOCTOR')->where('status', 1)->get();
@@ -28,6 +33,10 @@ class CitasController extends Controller
 
     public function selectDoctorDateScheduling(Request $request){
         $doctor = User::find($request->id);
+        // SI ES DOCTOR ENTRAR DIRECTAMENTE A AGENDAR CITA PARA EL
+        if(\Auth::user()->rol == "DOCTOR" ){
+            return redirect(url('/agendarCita/'.\Auth::id() ) );
+        }
         $doctor_list = User::where('rol','DOCTOR')->where('status', 1)->get();
 
         return view('admin.citas.seleccionar-doctor-para-agendar-cita', [
@@ -37,7 +46,7 @@ class CitasController extends Controller
     }
 
     public function availabilityPlanning(Request $request){
-        if(\Auth::user()->rol == "PATIENT" || (\Auth::user()->rol == "DOCTOR" && $request->id !== \Auth::id())){
+        if(\Auth::user()->rol == "PATIENT" || (\Auth::user()->rol == "DOCTOR" && $request->id != \Auth::id())){
             return redirect('/forbidden');
         }
 
@@ -164,7 +173,7 @@ class CitasController extends Controller
             ->where('status', strtoupper("pending"))->get();
             // if($now->greaterThan($scheduledDay->start) && $now->diffInHours($scheduledDay->start) < 24) $scheduledDay->title = 'Hoy';
 
-            if($now->greaterThanOrEqualTo($scheduledDay->start)) {
+            if($now->greaterThan($scheduledDay->start) && $now->diffInHours($scheduledDay->start) < 24) {
                 $scheduledDay->title = 'No disponible';
                 $scheduledDay->available = false;
             }

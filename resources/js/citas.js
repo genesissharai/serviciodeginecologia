@@ -198,11 +198,12 @@ function scheduleDate(){
 
           {
             url: '/disponibilidadDoctor/'+document.getElementById("selectedDoctor").value,
-            id: "disponibilidad"
+            id: "disponibilidad",
+            eventDisplay: 'background'
           },
           {
             url: '/citasPaciente' + "?id_doctor=" +document.getElementById("selectedDoctor").value,
-            id: "citas"
+            id: "citas",
           }
 
 
