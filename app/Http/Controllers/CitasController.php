@@ -11,7 +11,12 @@ class CitasController extends Controller
 {
     //
 
+
+
     public function selectDoctorForAvailabilityPlanning(Request $request){
+        if(\Auth::user()->rol == "PATIENT"){
+            return redirect('/forbidden');
+        }
         $doctor = User::find($request->id);
         $doctor_list = User::where('rol','DOCTOR')->where('status', 1)->get();
 
@@ -32,6 +37,10 @@ class CitasController extends Controller
     }
 
     public function availabilityPlanning(Request $request){
+        if(\Auth::user()->rol == "PATIENT" || (\Auth::user()->rol == "DOCTOR" && $request->id !== \Auth::id())){
+            return redirect('/forbidden');
+        }
+
         $doctor = User::find($request->id);
         if(!$doctor || $doctor->rol !== "DOCTOR"){
             return redirect()->back()->withErrors([1 => "Usuario seleccionado no es médico"]);
@@ -82,25 +91,25 @@ class CitasController extends Controller
             $doctor = User::find($request->id);
             $patient = User::find($request->idPatient);
 
-            $date =  new \Carbon\Carbon($request->date);
+            $date =  new \Carbon\Carbon($request->consultation_date);
             $now = new \Carbon\Carbon();
 
             $patientSchedule = MedicalConsultation::
             where('patient_id', $patient->id)
             ->where('doctor_id', $doctor->id)
-            ->where('date', ">=", $now->toDateString())
+            ->where('consultation_date', ">=", $now->toDateString())
             ->where('status', strtoupper("pending"))->first();
 
             if($patientSchedule){
                 return ['success' => false,
                 'errorCode' => 1,
-                'error' => "El paciente ya tiene una cita para el: ".  (new \Carbon\Carbon($patientSchedule->date))->toDateString()];
+                'error' => "El paciente ya tiene una cita para el: ".  (new \Carbon\Carbon($patientSchedule->consultation_date))->toDateString()];
             }
 
             $medicalConsultations = MedicalConsultation::where('doctor_id', $request->id)
-            ->whereDate('date', $date->toDateString())
+            ->whereDate('consultation_date', $date->toDateString())
             ->where('status', strtoupper("pending"))
-            ->orderBy('date','asc')
+            ->orderBy('consultation_date','asc')
             ->get();
 
             $endDate = $date->copy();
@@ -109,7 +118,7 @@ class CitasController extends Controller
             $newDate = $date->copy();
             if($medicalConsultations->count() > 0){
                 $last = $medicalConsultations->last();
-                $newDate = (new \Carbon\Carbon($last->date))->copy();
+                $newDate = (new \Carbon\Carbon($last->consultation_date))->copy();
                 $newDate->addMinutes(30);
                 if($newDate->greaterThanOrEqualTo($endDate)){
                     \DB::rollback();
@@ -122,10 +131,10 @@ class CitasController extends Controller
                 "patient_id" => $patient->id,
                 "doctor_id" => $doctor->id,
                 "status" => strtoupper("pending"),
-                "date" => $newDate->toDateTimeString(),
+                "consultation_date" => $newDate->toDateTimeString(),
             ]);
             \DB::commit();
-            $newDate = (new \Carbon\Carbon($new->date));
+            $newDate = (new \Carbon\Carbon($new->consultation_date));
             return ['success' => true,
             'message' => "Cita agendada para el ". $newDate->toDateString(). " a las ". $newDate->toTimeString() ];
 
@@ -151,7 +160,7 @@ class CitasController extends Controller
             $scheduledDay->available = true;
             $now = new \Carbon\Carbon();
             $medicalConsultations = MedicalConsultation::where('doctor_id', $request->id)
-            ->whereBetween('date', [$scheduledDay->start,$scheduledDay->end])
+            ->whereBetween('consultation_date', [$scheduledDay->start,$scheduledDay->end])
             ->where('status', strtoupper("pending"))->get();
             // if($now->greaterThan($scheduledDay->start) && $now->diffInHours($scheduledDay->start) < 24) $scheduledDay->title = 'Hoy';
 
@@ -161,7 +170,7 @@ class CitasController extends Controller
             }
             if($medicalConsultations->count() > 0 && $now->diffInDays($scheduledDay->start,false) < 3){
                 $last = $medicalConsultations->last();
-                $lastTime = new \Carbon\Carbon($last->date);
+                $lastTime = new \Carbon\Carbon($last->consultation_date);
                 $scheduledDayTime = new \Carbon\Carbon($scheduledDay->start);
                 $scheduledDayTime->hour = 11;
                 $scheduledDayTime->minute = 30;
@@ -187,15 +196,18 @@ class CitasController extends Controller
         ->when($user->rol == "PATIENT", function($q){
             $q->where('patient_id', $request->id);
         })
-        ->where('date', ">=", $now->toDateString())
+        ->where('consultation_date', ">=", $now->toDateString())
         ->where('status', strtoupper("pending"))->get();
+
         foreach($schedules as $schedule){
-            $date = (new \Carbon\Carbon($schedule->date));
-            $schedule->title = "Cita: ". $date->toTimeString();
+            $date = (new \Carbon\Carbon($schedule->consultation_date));
+            $schedule->title = "Cita: ". $date->format("h:i A");
             $schedule->fullName = $schedule->patient->fullName();
+            $schedule->start = $schedule->consultation_date;
             $schedule->type = "Cita";
             $schedule->_id = $schedule->id;
         }
+
         return $schedules;
 
     }

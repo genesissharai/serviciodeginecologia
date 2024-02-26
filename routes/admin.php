@@ -92,3 +92,8 @@ Route::get('/buscarPaciente', [CitasController::class, 'searchPatients'])->middl
 
 Route::delete('/cancelarCita', [CitasController::class, 'cancelSchedule'])->middleware(['auth']);
 
+/**
+ *
+ *  Referencias - Mandar a hacer los examenes
+ *
+ */

@@ -235,7 +235,7 @@ function scheduleDate(){
                 }
                 axios.post('/agendarCita/'+idDoctor,{
                     idPatient: idPatient,
-                    date: moment(selectionInfo.start).format("YYYY-MM-DD ") + "07:30:00"
+                    consultation_date: moment(selectionInfo.start).format("YYYY-MM-DD ") + "07:30:00"
                 },
                 {headers:{
                     'X-CSRF-TOKEN': csrfToken
@@ -253,7 +253,7 @@ function scheduleDate(){
                         })
                     }
                     else{
-                        swal({text: result.message})
+                        swal({text: result.message}).then(()=>{return location.reload()})
                     }
                 }).catch(_ => genericError());
             }
@@ -271,13 +271,12 @@ function scheduleDate(){
                 button.eventId = event.id;
                 button.addEventListener("click", () => { removeScheduleById(event.extendedProps._id) })
                 el.append(button)
-
-                let tooltip = new tooltip(el, {
-                title: info.event.extendedProps.fullName,
-                placement: 'top',
-                trigger: 'hover',
-                container: 'body'
-                });
+                el.addEventListener("click", ()=>{
+                    swal(
+                        "Hora: " + moment(event.start).format("YYYY-MM-DD hh:mm A") + "\n" +
+                        "Paciente: " + event.extendedProps.fullName + "\n"
+                    );
+                })
             }
         }
 
@@ -290,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const saveButtons = [...document.getElementsByClassName("saveCalendarData")]
     // document.getElementById("logEvents").addEventListener("click", logEvents);
 
-    let user = JSON.parse(document.getElementById("user").value)
+    // let user = JSON.parse(document.getElementById("user").value)
 
     if(!calendarType) return;
 

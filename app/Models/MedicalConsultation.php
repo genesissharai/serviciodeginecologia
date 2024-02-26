@@ -13,7 +13,7 @@ class MedicalConsultation extends Model
     protected $fillable = [
         'patient_id',
         'doctor_id',
-        'date',
+        'consultation_date',
         'status',
         'notes',
     ];

@@ -20,38 +20,44 @@
             </div>
         </a>
         <!-- Ver citas -->
-        <a href="{{url('dashboard')}}" class="col-12 col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="h5 font-weight-bold text-primary text-uppercase">
-                                Mis citas</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300 mb-3"></i>
+        @if (\Auth::user()->rol == "PATIENT")
+
+            <a href="{{url('dashboard')}}" class="col-12 col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="h5 font-weight-bold text-primary text-uppercase">
+                                    Mis citas</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300 mb-3"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        @endif
 
         <!-- Agendar horario disponible doctor -->
-        <a href="{{url('/agendarDisponibilidad')}}" class="col-12 col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="h5 font-weight-bold text-primary text-uppercase">
-                                disponibilidad de doctor</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300 mb-3"></i>
+        @if (\Auth::user()->rol !== "PATIENT")
+            <a href="{{url('/agendarDisponibilidad')}}" class="col-12 col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="h5 font-weight-bold text-primary text-uppercase">
+                                    disponibilidad de doctor</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300 mb-3"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
+            </a>
+
+        @endif
     </div>
 
     <div class="row">
@@ -81,17 +87,17 @@
                                 </thead>
                                 @forelse ($nextSchedules as $schedule)
                                     <tr>
-                                        <td colspan="">{{ \Carbon\Carbon::parse($schedule->date)->toDayDateTimeString() }}</td>
+                                        <td colspan="">{{ \Carbon\Carbon::parse($schedule->date)->format("y-m-d h:i A") }}</td>
                                         <td colspan="">{{$schedule->patient->fullName()}}</td>
                                         <td colspan="">{{$schedule->doctor->fullName()}}</td>
                                         <td colspan="">
-                                            <form id="cancelarCita-{{$schedule->id}}" data-id={{$schedule->id}} action="/cancelarCita" method="POST">
-                                                @method('DELETE')
-                                                @csrf
-                                                <input type="text" hidden value={{$schedule->id}}>
-                                                <button type="button" class="btn btn-danger btnCancelarCita" data-id={{$schedule->id}}  id="btnCancelarCita-{{$schedule->id}}">Cancelar</button>
-                                            </form>
-                                        </td>
+                                                <form id="cancelarCita-{{$schedule->id}}" data-id={{$schedule->id}} action="/cancelarCita" method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <input type="text" hidden value={{$schedule->id}}>
+                                                    <button type="button" class="btn btn-danger btnCancelarCita" data-id={{$schedule->id}}  id="btnCancelarCita-{{$schedule->id}}">Cancelar</button>
+                                                </form>
+                                            </td>
                                     </tr>
                                 @empty
                                     <td colspan="">No hay citas disponibles...</td>
@@ -106,6 +112,7 @@
                                         </a>
                                     </td>
                                 @endforelse
+                                {{$nextSchedules->links()}}
                             </table>
                         </div>
                     </div>

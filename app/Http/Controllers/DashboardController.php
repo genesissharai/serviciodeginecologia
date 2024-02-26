@@ -9,7 +9,14 @@ class DashboardController extends Controller
     //
 
     public function index(){
-        $nextSchedules = \App\Models\MedicalConsultation::whereNot('status', strtoupper("canceled"))->whereDate('date', '>=', \Carbon\Carbon::now())->paginate(25);
+        $user = \Auth::user();
+        $nextSchedules = \App\Models\MedicalConsultation::
+            when( ($user->rol == strtoupper("patient")) , function($q) use($user){
+                $q->where('patient_id',$user->id);
+            })
+            ->whereNot('status', strtoupper("canceled"))
+            ->whereDate('consultation_date', '>=', \Carbon\Carbon::now())
+            ->paginate(25);
 
         return view('admin.dashboard', ['title' => 'Dashboard', 'nextSchedules' => $nextSchedules]);
 
