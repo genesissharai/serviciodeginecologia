@@ -84,9 +84,15 @@ class MorbilidadController extends Controller
 
      public function destroy($id)
      {
-
+      $contador = 1;
       $morbidities = Morbidity::find($id);
+      
       $morbidities->delete();
+      
+
+      $morbidities = Morbidity::orderBy('id','desc')->paginate();
+      
+      return view('/morbilidad.consultar',['title' => 'Morbilidad'],compact('morbidities','contador'));
      }
 
 }
