@@ -13,8 +13,17 @@ class MedicalConsultation extends Model
     protected $fillable = [
         'patient_id',
         'doctor_id',
-        'date',
+        'consultation_date',
         'status',
         'notes',
     ];
+
+
+    public function patient(){
+        return $this->belongsTo(User::class, 'patient_id')->where('rol', strtoupper('patient'));
+    }
+
+    public function doctor(){
+        return $this->belongsTo(User::class, 'doctor_id')->where('rol', strtoupper('doctor'));
+    }
 }
