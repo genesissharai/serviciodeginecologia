@@ -41,15 +41,7 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">¡Registrarse!</h1>
                             </div>
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+
                             <form class="user" method="POST" action="{{url("/$registerType")}}" >
                                 {{ csrf_field() }}
                                 <div class="form-group row">
@@ -69,7 +61,7 @@
 
                                 <div class="form-group row">
                                     <div class="col-3 d-flex align-items-center">
-                                        <select class="form-control form-select" name="tipo_cedula" id="tipo_cedula" name="ci_type" required>
+                                        <select class="form-control form-select" id="tipo_cedula" name="ci_type" required>
                                             <option value="V-" selected> V </option>
                                             <option value="J-"> J </option>
                                             <option value="E-"> E </option>

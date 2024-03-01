@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CitasController;
+use App\Http\Controllers\ReferecesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,10 +24,10 @@ Route::get('/admin', function () {
 
 /*****
  *
- * Registro
+ * Usuarios
  *
  */
-
+//Register
 Route::get('/registerAdmin', function () {
     return view('admin.register',["registerType"=>"registerAdmin", "loginType" => "loginAdmin"]);
 })->name('registerAdmin');
@@ -43,17 +44,38 @@ Route::get('/registerSecretary', function () {
     return view('admin.register',["registerType"=>"registerSecretary", "loginType" => "loginSecretary"]);
 })->name('registerSecretary');
 
+//Update
+Route::get('/updateAdmin/{id}', [UserController::class, 'updateAdminView'])->name('updateAdmin');
+
+Route::get('/updateDoctor/{id}', [UserController::class, 'updateDoctorView'])->name('updateDoctor');
+
+Route::get('/updatePatient/{id}', [UserController::class, 'updatePatientView'])->name('updatePatient');
+
+Route::get('/updateSecretary/{id}', [UserController::class, 'updateSecretaryView'])->name('updateSecretary');
+
+
+//List
+Route::get('/getAdmins', [UserController::class, 'getAdminList'])->name('getAdmins');
+
+Route::get('/getDoctors', [UserController::class, 'getDoctorList'])->name('getDoctors');
+
+Route::get('/getPatients', [UserController::class, 'getPatientList'])->name('getPatients');
+
+Route::get('/getSecretaries', [UserController::class, 'getSecretaryList'])->name('getSecretaries');
+
+
+
 Route::post('/registerAdmin', [UserController::class, 'registerAdmin']);
 Route::post('/registerDoctor', [UserController::class, 'registerDoctor']);
 Route::post('/registerPatient', [UserController::class, 'registerPatient']);
 Route::post('/registerSecretary', [UserController::class, 'registerSecretary']);
 
+Route::patch('/updateAdmin/{id}', [UserController::class, 'updateAdmin']);
+Route::patch('/updateDoctor/{id}', [UserController::class, 'updateDoctor']);
+Route::patch('/updatePatient/{id}', [UserController::class, 'updatePatient']);
+Route::patch('/updateSecretary/{id}', [UserController::class, 'updateSecretary']);
 
-/**
- *
- * Usuarios
- *
-  */
+
 
 
 
@@ -97,3 +119,6 @@ Route::delete('/cancelarCita', [CitasController::class, 'cancelSchedule'])->midd
  *  Referencias - Mandar a hacer los examenes
  *
  */
+
+Route::get('/administrarExamenesPaciente', [ReferecesController::class, 'getPatientReferences'])->middleware(['auth']);
+

@@ -53,4 +53,15 @@ class User extends Authenticatable
     public function fullName (){
         return $this->name." ".$this->last_name;
     }
+
+    /**
+     * Get the user associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function doctorData(){
+        return $this->hasOne(Doctor::class);
+    }
+
+
 }

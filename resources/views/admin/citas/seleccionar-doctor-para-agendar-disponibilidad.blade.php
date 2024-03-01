@@ -7,6 +7,7 @@
         <div class="card-body">
             <div class="mb-3">
                 <div class="table-responsive">
+                    {{$doctor_list->links()}}
                     <table class="table" id="dataTable">
                         <thead>
                             <th>Nombre</th>
@@ -23,6 +24,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{$doctor_list->links()}}
                 </div>
             </div>
         </div>

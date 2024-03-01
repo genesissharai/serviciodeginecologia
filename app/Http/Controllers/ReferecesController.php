@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class Refereces extends Controller
+class ReferecesController extends Controller
 {
     //
 
@@ -21,8 +21,9 @@ class Refereces extends Controller
 
     }
 
-    public function getPatientReferences(){
+    public function getPatientReferences(Request $request){
 
+        return true;
     }
 
 

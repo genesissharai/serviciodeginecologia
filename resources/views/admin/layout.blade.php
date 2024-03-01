@@ -58,6 +58,33 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
+            @if(\Auth::user()->rol !== "PATIENT")
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
+                        aria-expanded="true" aria-controls="collapseUsers">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>
+                            @if(\Auth::user()->rol !== "ADMIN")
+                                Administrar pacientes
+                            @else
+                                Administrar usuarios
+                            @endif
+                        </span>
+                    </a>
+                    <div id="collapseUsers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
+                            @if(\Auth::user()->rol !== "ADMIN")
+                                <a class="collapse-item"  href="{{url('/getPatients')}}">Pacientes</a>
+                            @else
+                                <a class="collapse-item" href="{{url('/getAdmins')}}">Administradores</a>
+                                <a class="collapse-item" href="{{url('/getDoctors')}}">Doctores</a>
+                                <a class="collapse-item"  href="{{url('/getSecretaries')}}">Secretarios</a>
+                            @endif
+                        </div>
+                    </div>
+                </li>
+            @endif
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConsultations"
                     aria-expanded="true" aria-controls="collapseConsultations">
@@ -73,12 +100,12 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConsultations"
-                    aria-expanded="true" aria-controls="collapseConsultations">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsMorbilidad"
+                    aria-expanded="true" aria-controls="collapsMorbilidad">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Morbilidad Diaria</span>
                 </a>
-                <div id="collapseConsultations" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapsMorbilidad" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
                         <a class="collapse-item" href="{{url('/registrarmorbilidad')}}">Registrar morbilidad</a>
@@ -88,12 +115,12 @@
 
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConsultations"
-                    aria-expanded="true" aria-controls="collapseConsultations">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNoticias"
+                    aria-expanded="true" aria-controls="collapseNoticias">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Noticias</span>
                 </a>
-                <div id="collapseConsultations" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseNoticias" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
                         <a class="collapse-item" href="{{url('/registrarnoticias')}}">Registrar noticias</a>
@@ -103,12 +130,12 @@
 
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConsultations"
-                    aria-expanded="true" aria-controls="collapseConsultations">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEventos"
+                    aria-expanded="true" aria-controls="collapseEventos">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Eventos</span>
                 </a>
-                <div id="collapseConsultations" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseEventos" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
                         <a class="collapse-item" href="{{url('/registrarmorbilidad')}}">Registrar Eventos</a>
@@ -303,25 +330,16 @@
                                     $user = \Auth::user();
                                 @endphp
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{$user->name}} {{$user->last_name}}</span>
-                                <img class="img-profile rounded-circle"
-                                    src="{{Vite::asset('resources/img/undraw_profile.svg')}}">
+                                {{-- <img class="img-profile rounded-circle"
+                                    src="{{Vite::asset('resources/img/undraw_profile.svg')}}"> --}}
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="javascript:void(0)" {{-- href="/perfil" --}}>
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -339,7 +357,19 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800">{{$title}}</h1>
-
+                    @if ($errors->any())
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                     @yield('content')
 
                 </div>
@@ -383,7 +413,7 @@
                 <div class="modal-body">Seleccione "Salir" abjo si esta listo para cerrar sessión.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <form action="{{url('logout')}}" method="POST">
+                    <form action="{{url('/logout')}}" method="POST">
                         @csrf
                         @method('PUT')
                         <button type="submit" value="logout" class="btn btn-primary">Salir</button>
