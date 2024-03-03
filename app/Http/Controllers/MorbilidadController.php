@@ -43,7 +43,7 @@ class MorbilidadController extends Controller
 
      }
 
-     public function consultarMorbi(Request $request)
+     public function consultarMorbi()
      {
         $morbidities = Morbidity::orderBy('id','desc')->paginate();
 
@@ -68,7 +68,7 @@ class MorbilidadController extends Controller
       $morbidities = Morbidity::find($id);
       $morbidities->name = $request->name;
       $morbidities->last_name = $request->last_name;
-      $morbidities->ci = $request->ci;
+      $morbidities->ci = $request->cedula;
       $morbidities->age=$request->fn;
       $morbidities->pregnancies=$request->pregnancies;
       $morbidities->fvr=$request->fvr;
@@ -80,6 +80,11 @@ class MorbilidadController extends Controller
       $morbidities->physical_exam=$request->physical_exam;
       $morbidities->conduct=$request->conduct;
       $morbidities->save();
+      
+      $morbidities = Morbidity::orderBy('id','desc')->paginate();
+      $contador = 1;
+
+      return view('/morbilidad.consultar',['title' => 'Morbilidad'],compact('morbidities', 'contador'));
      }
 
      public function destroy($id)

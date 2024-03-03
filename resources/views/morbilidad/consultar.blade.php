@@ -69,7 +69,10 @@
 
 
                               @endforeach
+
+                            
                               </table>
+
                       </div>
                   </div>
           

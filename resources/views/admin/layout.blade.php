@@ -97,7 +97,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
                         <a class="collapse-item" href="{{url('/registrarnoticias')}}">Registrar noticias</a>
-                        <a class="collapse-item" href="{{url('/consultarmorbilidad')}}">Consultar noticias</a>
+                        <a class="collapse-item" href="{{url('/consultarnoticias')}}">Consultar noticias</a>
                     </div>
                 </div>
 
@@ -111,8 +111,8 @@
                 <div id="collapseConsultations" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
-                        <a class="collapse-item" href="{{url('/registrarmorbilidad')}}">Registrar Eventos</a>
-                        <a class="collapse-item" href="{{url('/consultarmorbilidad')}}">Consultar Eventos</a>
+                        <a class="collapse-item" href="{{url('/')}}">Registrar Eventos</a>
+                        <a class="collapse-item" href="{{url('/')}}">Consultar Eventos</a>
                     </div>
                 </div>
 

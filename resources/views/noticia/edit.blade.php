@@ -27,7 +27,6 @@
                                     <i class="far fa-arrow-to-left"></i>
                                     <u>Volver al inicio</u></a>
                             </div>
-                           
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center ">
@@ -35,18 +34,19 @@
                                     </div>
                                     <Br>
 
-                                    <form class="user" method="POST" action="{{url("/registrarnoticias")}}" enctype="multipart/form-data">
+                                    <form class="user" method="POST" action="{{url("/editnoticias", $new->id)}}" enctype="multipart/form-data">
                                         @csrf
+                                        @method('put');
                                         
                                         <div class="col-lg-12">
                                             <Strong>Titulo de la noticia</Strong>
-                                            <input type="text" class="form-control" value="" name="tittle">
+                                            <input type="text" class="form-control" value="{{$new->title}}" name="tittle">
                                           </div>
                                           <BR>
                                         <div class="row">
                                             <div class="col">
                                               <Strong>Autor de la noticia</Strong>
-                                              <input type="text" class="form-control" value="" name="autor">
+                                              <input type="text" class="form-control" value="{{$new->slug}}" name="autor">
                                             </div>
                                             <div class="col">
                                                 <Strong>Cargar imagen</Strong>
@@ -57,7 +57,7 @@
                                           <BR>
                                                 <div class="col-lg-12">
                                                     <Strong>Descripcion de la noticia</Strong>
-                                                    <input type="text" class="form-control" value="" name="description">
+                                                    <input type="text" class="form-control" value="{{$new->description}}" name="description">
                                                   </div>
                                                   <BR>
 
@@ -71,6 +71,8 @@
                                     </form>
                                 </div>
                             </div>
+                           
+        
 
 
                         </div>

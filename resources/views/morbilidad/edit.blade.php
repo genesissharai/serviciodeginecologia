@@ -23,7 +23,7 @@
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <div class="col-12 pr-4 py-1 d-flex justify-content-end">
-                                <a role="button" href="{{url('/')}}" class="small color-info">
+                                <a role="button" href="{{url('/dashboard')}}" class="small color-info">
                                     <i class="far fa-arrow-to-left"></i>
                                     <u>Volver al inicio</u></a>
                             </div>
@@ -49,7 +49,7 @@
                                             <input type="text" class="form-control" value="{{$morbidities->last_name}}" name="last_name">
                                           </div>
                                         </div>
-                                         <hr>
+                                        <BR>
                                          <div class="row">
                                             <div class="col">
                                             <Strong>Cedula</Strong>
@@ -60,7 +60,7 @@
                                               <input type="date" class="form-control" value="{{$morbidities->age}}" name="fn">
                                             </div>
                                           </div>
-                                          <hr>
+                                          <BR>
                                           <div class="row">
                                              <div class="col">
                                                 <Strong>Gestas</Strong>
@@ -71,7 +71,7 @@
                                                <input type="date" class="form-control" value="{{$morbidities->fvr}}" name="fvr">
                                              </div>
                                            </div>
-                                           <hr>
+                                           <BR>
                                            <div class="row">
                                               <div class="col">
                                                 <Strong>Edad gestacional por FUR</Strong>
@@ -82,7 +82,7 @@
                                                 <input type="date" class="form-control" value="{{$morbidities->first_eco}}" name="first_eco">
                                               </div>
                                             </div>
-                                            <hr>
+                                            <BR>
                                             <div class="row">
                                                <div class="col">
                                                 <Strong>Edad gestacional por FUE</Strong>
@@ -93,7 +93,7 @@
                                                  <input type="text" class="form-control" value="{{$morbidities->ta}}" name="ta">
                                                </div>
                                              </div>
-                                             <hr>
+                                             <BR>
                                              <div class="row">
                                              <div class="col-lg-4">
                                                 <Strong>Altura uterina</Strong>
@@ -104,14 +104,14 @@
                                                  <input type="text" class="form-control" value="{{$morbidities->physical_exam}}" name="physical_exam">
                                                </div>
                                             </div>
-                                            <hr>
+                                            <BR>
                                             <div class="row">
                                                 <div class="col-lg-4">
                                                    <Strong>Conducta</Strong>
                                                    <input type="text" class="form-control" value="{{$morbidities->conduct}}" name="conduct">
                                                  </div>
                                                </div>
-                                               <hr>
+                                               <BR>
                                                <div class="d-flex justify-content-center w-40" >
                                                <button type="submit" class="btn btn-primary btn-user" justify-content= "center">
                                                 MODIFICAR
