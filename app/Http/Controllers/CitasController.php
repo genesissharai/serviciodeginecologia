@@ -23,7 +23,7 @@ class CitasController extends Controller
             return redirect(url('/agendarDisponibilidad/'.\Auth::id()));
         }
         $doctor = User::find($request->id);
-        $doctor_list = User::where('rol','DOCTOR')->where('status', 1)->get();
+        $doctor_list = User::where('rol','DOCTOR')->orderBy('name','ASC')->orderBy('last_name','ASC')->where('status', 1)->paginate(100);
 
         return view('admin.citas.seleccionar-doctor-para-agendar-disponibilidad', [
             'title' => "Seleccione al medico",
@@ -37,7 +37,7 @@ class CitasController extends Controller
         if(\Auth::user()->rol == "DOCTOR" ){
             return redirect(url('/agendarCita/'.\Auth::id() ) );
         }
-        $doctor_list = User::where('rol','DOCTOR')->where('status', 1)->get();
+        $doctor_list = User::where('rol','DOCTOR')->orderBy('name','ASC')->orderBy('last_name','ASC')->where('status', 1)->paginate(100);
 
         return view('admin.citas.seleccionar-doctor-para-agendar-cita', [
             'title' => "Seleccione al medico",

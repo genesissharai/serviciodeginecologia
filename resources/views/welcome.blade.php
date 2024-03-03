@@ -25,7 +25,8 @@
             @if (
                 Route::has('loginPatient') ||
                 Route::has('loginDoctor') ||
-                Route::has('loginSecretary')
+                Route::has('loginSecretary') ||
+                Route::has('loginAdmin')
             )
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     @auth
@@ -36,16 +37,18 @@
                         <a href="{{ route('loginDoctor') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in Doctor</a>
                         <br>
                         <a href="{{ route('loginSecretary') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in Secretary</a>
-                        {{-- <br> --}}
-                        {{-- <a href="{{ route('loginAdmin') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in Admin</a> --}}
+                        <br>
+                        <a href="{{ route('loginAdmin') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in Admin</a>
                         <br>
 
                         @if (Route::has('registerPatient') ||
                         Route::has('registerDoctor') ||
-                        Route::has('registerSecretary'))
+                        Route::has('registerSecretary') ||
+                        Route::has('registerAdmin'))
                             <a href="{{ route('registerPatient') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register Patient</a>
                             <a href="{{ route('registerDoctor') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register Doctor</a>
                             <a href="{{ route('registerSecretary') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register Secretary</a>
+                            <a href="{{ route('registerAdmin') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register Admin</a>
                         @endif
                     @endauth
                 </div>
