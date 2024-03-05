@@ -163,10 +163,10 @@ class UserController extends Controller
             event(new Registered($user));
 
             //Auth::login($user);
-            DB::commit();
+            \DB::commit();
             return redirect('/');
         }catch(\Exception $e){
-            DB::rollback();
+            \DB::rollback();
             \Log::info($e);
             return redirect()->back()->withErrors(["error" => "Algo ha fallado"]);
         }
