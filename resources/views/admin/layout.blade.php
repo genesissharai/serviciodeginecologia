@@ -77,6 +77,7 @@
                             @if(\Auth::user()->rol !== "ADMIN")
                                 <a class="collapse-item"  href="{{url('/getPatients')}}">Pacientes</a>
                             @else
+                                <a class="collapse-item"  href="{{url('/getPatients')}}">Pacientes</a>
                                 <a class="collapse-item" href="{{url('/getAdmins')}}">Administradores</a>
                                 <a class="collapse-item" href="{{url('/getDoctors')}}">Doctores</a>
                                 <a class="collapse-item"  href="{{url('/getSecretaries')}}">Secretarios</a>
@@ -85,6 +86,15 @@
                     </div>
                 </li>
             @endif
+
+            @if(\Auth::user()->rol == "PATIENT")
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('/administrarExamenesPaciente/'.\Auth::id())}}">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Examenes</span></a>
+                </li>
+            @endif
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConsultations"
                     aria-expanded="true" aria-controls="collapseConsultations">
@@ -369,6 +379,20 @@
                             </div>
                         </div>
                     </div>
+                    @endif
+                    @php
+                        $success = session("success");
+                    @endphp
+                    @if($success)
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-success">
+                                <ul>
+                                    {{$success}}
+                                </ul>
+                            </div>
+                        </d
+
                     @endif
                     @yield('content')
 
