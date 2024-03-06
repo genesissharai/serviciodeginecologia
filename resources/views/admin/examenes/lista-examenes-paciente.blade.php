@@ -14,9 +14,9 @@
 
                     <table class="table table-striped table-bordered">
                         <thead>
-                            <th>Fecha</th>
-                            <th>Examen</th>
+                            <th>Fecha creado</th>
                             <th>Mandado por</th>
+                            <th>Examen</th>
                             @if(\Auth::user()->rol == "DOCTOR")
                                 <th>{{-- Acciones --}}</th>
                             @endif
