@@ -77,6 +77,7 @@
                             @if(\Auth::user()->rol !== "ADMIN")
                                 <a class="collapse-item"  href="{{url('/getPatients')}}">Pacientes</a>
                             @else
+                                <a class="collapse-item"  href="{{url('/getPatients')}}">Pacientes</a>
                                 <a class="collapse-item" href="{{url('/getAdmins')}}">Administradores</a>
                                 <a class="collapse-item" href="{{url('/getDoctors')}}">Doctores</a>
                                 <a class="collapse-item"  href="{{url('/getSecretaries')}}">Secretarios</a>
@@ -369,6 +370,20 @@
                             </div>
                         </div>
                     </div>
+                    @endif
+                    @php
+                        $success = session("success");
+                    @endphp
+                    @if($success)
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-success">
+                                <ul>
+                                    {{$success}}
+                                </ul>
+                            </div>
+                        </d
+
                     @endif
                     @yield('content')
 

@@ -120,5 +120,10 @@ Route::delete('/cancelarCita', [CitasController::class, 'cancelSchedule'])->midd
  *
  */
 
-Route::get('/administrarExamenesPaciente', [ReferecesController::class, 'getPatientReferences'])->middleware(['auth']);
+Route::get('/administrarExamenesPaciente/{id}', [ReferecesController::class, 'getPatientReferences'])->middleware(['auth']);
+Route::get('/crearExamenPaciente/{id}', [ReferecesController::class, 'create'])->middleware(['auth']);
+Route::post('/crearExamenPaciente/{id}', [ReferecesController::class, 'store'])->middleware(['auth']);
+Route::get('/modificarExamenPaciente/{id}', [ReferecesController::class, 'updateView'])->middleware(['auth']);
+Route::put('/modificarExamenPaciente/{id}', [ReferecesController::class, 'update'])->middleware(['auth']);
+Route::delete('/eliminarExamenPaciente/{id}', [ReferecesController::class, 'delete'])->middleware(['auth']);
 

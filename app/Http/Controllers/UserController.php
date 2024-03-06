@@ -161,6 +161,7 @@ class UserController extends Controller
             }
 
             event(new Registered($user));
+            session()->flash("success", "Usuario registrado con exito");
 
             //Auth::login($user);
             \DB::commit();
@@ -219,8 +220,15 @@ class UserController extends Controller
             }
 
             //Auth::login($user);
+            if($userRol == "PATIENT") $urlBack = "/getPatients";
+            if($userRol == "DOCTOR") $urlBack = "/getDoctors";
+            if($userRol == "SECRETARY") $urlBack = "/getSecretaries";
+            if($userRol == "ADMIN") $urlBack = "/getAdmins";
+
             \DB::commit();
-            return redirect()->back()->with(["success" => "Usuario actualizado con exito"]);
+            session()->flash("success", "Usuario actualizado con exito");
+
+            return redirect($urlBack);
         }catch(\Exception $e){
             \DB::rollback();
             \Log::info($e);
@@ -235,15 +243,28 @@ class UserController extends Controller
         if($userRol == "DOCTOR") $title = "Actualizar Doctor";
         if($userRol == "SECRETARY") $title = "Actualizar Secretario";
         if($userRol == "ADMIN") $title = "Actualizar Administrador";
+
         $user = User::with('doctorData')->find($request->id);
         $updateType = "update".ucfirst(strtolower($userRol));
         return view('admin.users.update', compact("title", "user", "updateType"));
     }
 
-    public function getUserList($request, $rol){
+    public function getUserList(Request $request, $rol){
+
+        $searchTerms = $request->input();
+
+        if($rol == "ADMIN")
+            $action = "/getAdmins";
+        if($rol == "DOCTOR")
+            $action = "/getDoctors";
+        if($rol == "PATIENT")
+            $action = "/getPatients";
+        if($rol == "SECRETARY")
+            $action = "/getSecretaries";
+
         $users = User::where('rol', $rol)
             ->when(($request->name), function($q) use($request){
-                $q->where(function($q2){
+                $q->where(function($q2) use($request){
                     $q2->where("name", "like", "%$request->name%")
                         ->orWhere("last_name", "like", "%$request->name%");
                 });
@@ -255,12 +276,12 @@ class UserController extends Controller
                 $q->where("ci", $request->ci);
             })
             ->when(($request->hierarchy), function($q) use($request){
-                $q->whereHas('doctorData',function($q2){
+                $q->whereHas('doctorData',function($q2) use($request){
                     $q->where("hierarchy", $request->hierarchy);
                 });
             })
             ->when(($request->specialty), function($q) use($request){
-                $q->whereHas('doctorData',function($q2){
+                $q->whereHas('doctorData',function($q2) use($request){
                     $q->where("specialty", $request->specialty);
                 });
             })
@@ -268,7 +289,8 @@ class UserController extends Controller
             ->orderBy('last_name','ASC')
             ->paginate(25);
         $title = "Lista de usuarios";
-        return view('admin.users.get-users-list', compact('users', 'title', "rol"));
+
+        return view('admin.users.get-users-list', compact('users', 'title', "rol", "action", "searchTerms"));
     }
 
 }
