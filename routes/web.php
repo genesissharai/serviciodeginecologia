@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\MorbilidadController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\EventosController;
 use App\Models\News;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +55,7 @@ Route::get('/registrarmorbilidad', function () {
 Route::get('/registrarnoticias', function () {
     return view('noticia.registrar', ['title' => 'Noticias']);
 });
+Route::get('/registrareventos',[EventosController::class, 'iniciar']);
 
 Route::get('/consultarmorbilidad',[MorbilidadController::class, 'consultarMorbi']);
 Route::get('/consultarnoticias',[NewsController::class, 'consultnews']);
@@ -63,6 +65,9 @@ Route::get('/editnoticias/{id}',[NewsController::class, 'editarNoticia']);
 Route::put('/editnoticias/{id}',[NewsController::class, 'update']);
 Route::delete('/deletemorby/{id}',[MorbilidadController::class, 'destroy']);
 Route::delete('/deletenew/{id}',[NewsController::class, 'destroy']);
+Route::get('/listeventos/{id}',[EventosController::class,'consulevents']);
+Route::get('/updateevents/{id}',[EventosController::class,'editevents']);
+
 
 
 
@@ -81,6 +86,11 @@ Route::post('/loginSecretary',[LoginController::class,'loginSecretary']);
 Route::post('/loginAdmin',[LoginController::class,'loginAdmin']);
 Route::post('/registrarmorbilidad',[MorbilidadController::class, 'RegistrarMorbi']);
 Route::post('/registrarnoticias',[NewsController::class, 'Registernew']);
+Route::post('/registrareventos',[EventosController::class, 'Registereventos']);
+Route::post('/updateevents/{id}',[EventosController::class, 'updateeventos']);
+Route::delete('/deleteevents/{id}',[EventosController::class, 'destroy']);
+
+
 
 
 //require __DIR__.'/auth.php';

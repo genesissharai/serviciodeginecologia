@@ -17,7 +17,7 @@ class new_tablet extends Model
         'file_name',
         'slug',
         'status',
-        'order',
+        'author',
         'type',
         'author_id',
     ];
