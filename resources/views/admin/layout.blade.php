@@ -153,7 +153,7 @@
 
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEventos"
+                <a class="nav-link collapsed" href="{{url('/registrareventos')}}" data-toggle="collapse" data-target="#collapseEventos"
                     aria-expanded="true" aria-controls="collapseEventos">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Eventos</span>
@@ -161,8 +161,8 @@
                 <div id="collapseEventos" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
-                        <a class="collapse-item" href="{{url('/')}}">Registrar Eventos</a>
-                        <a class="collapse-item" href="{{url('/')}}">Consultar Eventos</a>
+                        <a class="collapse-item" href="{{url('/registrareventos')}}">Registrar Eventos</a>
+
                     </div>
                 </div>
 

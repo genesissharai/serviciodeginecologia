@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\new_tablet;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 
 class NewsController extends Controller
@@ -45,11 +46,13 @@ class NewsController extends Controller
     public function consultnews(Request $request)
     {
 
-        $new = new_tablet::orderBy('id','desc')->paginate();
+      //  $new = new_tablet::orderBy('id','desc')->where('new_tablet.type', '=','Noticia');
+
+        $new = DB::table('news_table')->orderBy('id','desc')->where('type', '=','Noticia')->get();
 
         $contador = 1;
         
-        return view('/noticia.consultar',['title' => 'Noticia'],compact('new', 'contador'));
+       return view('/noticia.consultar',['title' => 'Noticia'],compact('new', 'contador'));
       
     }
     public function editarNoticia($id)
@@ -77,13 +80,14 @@ class NewsController extends Controller
              $new->file_name=$nameImagen;
              $new->slug=$slug;
              $new->status='Activa';
-             $new->order=$cont;
+             $new->author=$request->autor;
              $new->type='Noticia';
              $new->author_id=\Auth::id();
              $new->save();
 
 
-              $new = new_tablet::orderBy('id','desc')->paginate();
+             // $new = new_tablet::orderBy('id','desc')->paginate();
+             $new = DB::table('news_table')->orderBy('id','desc')->where('type', '=','Noticia')->get();
               return view('/noticia.consultar',['title' => 'Noticia'],compact('new', 'cont'));
 
        }
@@ -94,7 +98,8 @@ class NewsController extends Controller
         $new = new_tablet::find($id);
         $new->delete();
         $cont= 1;
-        $new = new_tablet::orderBy('id','desc')->paginate();
+        $new = DB::table('news_table')->orderBy('id','desc')->where('type', '=','Noticia')->get();
+        //$new = new_tablet::orderBy('id','desc')->paginate();
         return view('/noticia.consultar',['title' => 'Noticia'],compact('new'));
       
     }
