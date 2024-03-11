@@ -15,7 +15,7 @@ return new class extends Migration
     {
         //
         Schema::table('news_table',function(Blueprint $table){
-        $table->dropColum('order');
+        $table->dropColumn('order');
         $table->string('author');
         });
     }
@@ -29,7 +29,7 @@ return new class extends Migration
     {
         //
         Schema::table('news_table',function(Blueprint $table){
-            $table->dropColum('author');
+            $table->dropColumn('author');
             $table->integer('order');
             });
     }
