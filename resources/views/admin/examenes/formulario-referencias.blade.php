@@ -31,7 +31,15 @@
                                 <input type="text" hidden value="{{$patient->id}}" name="patientId">
 
                                 <label for="">Detalle los examenes que deben realizarse al paciente</label>
-                                <textarea class="form-control" name="exams" id="" cols="30" rows="10">@if(isset($reference)){{$reference->exams}}@endif</textarea>
+                                <textarea class="form-control" name="exams" id="references" cols="30" rows="10">
+                                    @if(isset($reference))
+                                        {{$reference->exams}}
+                                    @else
+                                        <ul>
+                                            <li>Nombre de examen</li>
+                                        </ul>
+                                    @endif
+                                </textarea>
                                 <br>
                                 <button type="submit" class="btn btn-primary">Guardar</button>
                             </form>
@@ -41,5 +49,7 @@
             </div>
         </div>
     </div>
+
+    @include('admin.summernote',["id"=>"references"])
 
 @endsection

@@ -22,96 +22,73 @@ class UserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function registerAdmin(Request $request)
-    {
-        return $this->register($request,"ADMIN");
-    }
+    public function registerAdmin(Request $request){ return $this->register($request,"ADMIN", false); }
+    public function registerDoctor(Request $request){ return $this->register($request,"DOCTOR", false); }
+    public function registerSecretary(Request $request){ return $this->register($request,"SECRETARY", false); }
+    public function registerPatient(Request $request){ return $this->register($request,"PATIENT", false); }
 
-    public function registerDoctor(Request $request)
-    {
-        return $this->register($request,"DOCTOR");
-    }
+    public function adminRegisterAdmin(Request $request){ return $this->register($request,"ADMIN", true); }
+    public function adminRegisterDoctor(Request $request){ return $this->register($request,"DOCTOR", true); }
+    public function adminRegisterSecretary(Request $request){ return $this->register($request,"SECRETARY", true); }
+    public function adminRegisterPatient(Request $request){ return $this->register($request,"PATIENT", true); }
 
-    public function registerSecretary(Request $request)
-    {
-        return $this->register($request,"SECRETARY");
-    }
-
-    public function registerPatient(Request $request)
-    {
-       return $this->register($request,"PATIENT");
-    }
+    // register from admin GET
+    public function adminRegisterAdminView(Request $request) { return $this->registerView($request,"ADMIN"); }
+    public function adminRegisterDoctorView(Request $request) { return $this->registerView($request,"DOCTOR"); }
+    public function adminRegisterSecretaryView(Request $request) { return $this->registerView($request,"SECRETARY"); }
+    public function adminRegisterPatientView(Request $request) { return $this->registerView($request,"PATIENT"); }
 
 
     // Update GET
-    public function updateAdminView(Request $request)
-    {
-        return $this->updateUserView($request,"ADMIN");
-    }
-
-    public function updateDoctorView(Request $request)
-    {
-        return $this->updateUserView($request,"DOCTOR");
-    }
-
-    public function updateSecretaryView(Request $request)
-    {
-        return $this->updateUserView($request,"SECRETARY");
-    }
-
-    public function updatePatientView(Request $request)
-    {
-       return $this->updateUserView($request,"PATIENT");
-    }
+    public function updateAdminView(Request $request){ return $this->updateUserView($request,"ADMIN"); }
+    public function updateDoctorView(Request $request){ return $this->updateUserView($request,"DOCTOR"); }
+    public function updateSecretaryView(Request $request){ return $this->updateUserView($request,"SECRETARY"); }
+    public function updatePatientView(Request $request){ return $this->updateUserView($request,"PATIENT"); }
 
     // Update POST
-    public function updateAdmin(Request $request)
-    {
-        return $this->update($request,"ADMIN");
-    }
-
-    public function updateDoctor(Request $request)
-    {
-        return $this->update($request,"DOCTOR");
-    }
-
-    public function updateSecretary(Request $request)
-    {
-        return $this->update($request,"SECRETARY");
-    }
-
-    public function updatePatient(Request $request)
-    {
-       return $this->update($request,"PATIENT");
-    }
+    public function updateAdmin(Request $request){ return $this->update($request,"ADMIN"); }
+    public function updateDoctor(Request $request){ return $this->update($request,"DOCTOR"); }
+    public function updateSecretary(Request $request){ return $this->update($request,"SECRETARY"); }
+    public function updatePatient(Request $request){ return $this->update($request,"PATIENT"); }
 
 
     // List
-    public function getAdminList(Request $request)
-    {
-        return $this->getUserList($request,"ADMIN");
+    public function getAdminList(Request $request){ return $this->getUserList($request,"ADMIN"); }
+    public function getDoctorList(Request $request){ return $this->getUserList($request,"DOCTOR"); }
+    public function getSecretaryList(Request $request){ return $this->getUserList($request,"SECRETARY"); }
+    public function getPatientList(Request $request){ return $this->getUserList($request,"PATIENT"); }
+
+
+    public function registerView(Request $request, String $userRol){
+        $jerarquiasDoctor  = [];
+        if($userRol == "ADMIN"){
+            $registerType = "registerAdmin";
+            $action = "/admin/registerAdmin";
+            $title = "Registrar administrador";
+        }
+        if($userRol == "DOCTOR"){
+            $registerType = "registerDoctor";
+            $action = "/admin/registerDoctor";
+            $jerarquiasDoctor  = \App\Models\DoctorHierarchy::all();
+            $title = "Registrar doctor";
+        }
+        if($userRol == "PATIENT"){
+            $registerType = "registerPatient";
+            $action = "/admin/registerPatient";
+            $title = "Registrar paciente";
+        }
+        if($userRol == "SECRETARY"){
+            $registerType = "registerSecretary";
+            $action = "/admin/registerSecretary";
+            $title = "Registrar secretario";
+        }
+
+
+        return view('admin.users.register', compact('title','action','registerType','jerarquiasDoctor'));
     }
 
-    public function getDoctorList(Request $request)
-    {
-        return $this->getUserList($request,"DOCTOR");
-    }
 
-    public function getSecretaryList(Request $request)
-    {
-        return $this->getUserList($request,"SECRETARY");
-    }
-
-    public function getPatientList(Request $request)
-    {
-       return $this->getUserList($request,"PATIENT");
-    }
-
-
-
-
-
-    public function register(Request $request, String $userRol){
+    public function register(Request $request, String $userRol, $isAdmin){
         \DB::beginTransaction();
         $uniqueEmailRule =  Rule::unique('users')->where(function ($query) use($request, $userRol){
                         return $query->where('email', $request['email']??'')
@@ -129,15 +106,13 @@ class UserController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:255'],
             'birthdate' => ['required', 'date'],
+            'doctor_hierarchy_id' => ['numeric'],
             'email' => ['required', 'string', 'email', 'max:255', $uniqueEmailRule],
             'ci' => ['required', 'numeric', $uniqueCiRule],
             'ci_type' => ['required', 'string'],
-            'password' => ['required', Rules\Password::defaults()],
+            'password' => ['required', 'min:4'],
         ];
-        if($userRol == "DOCTOR"){
-            $validationRules['hierarchy'] = ['required', 'string', 'max:255'];
-            $validationRules['specialty'] = ['required', 'string', 'max:255'];
-        }
+
         $request->validate($validationRules);
         try{
             $user = User::create([
@@ -146,18 +121,14 @@ class UserController extends Controller
                 'ci' => $request->ci_type . $request->ci,
                 'rol' => $userRol,
                 'email' => $request->email,
+                'doctor_hierarchy_id' => $request->doctor_hierarchy_id,
                 'birthdate' => $request->birthdate,
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
             ]);
 
-            if($userRol == "DOCTOR"){
-                $doctor = Doctor::create([
-                    'hierarchy' => $request->hierarchy,
-                    'specialty' => $request->specialty,
-                    'user_id' => $user->id,
-                    'status' => 1,
-                ]);
+            if($userRol == "PATIENT"){
+                \DB::table('gynecological_clinical_history')->insert(["user_id" => $user->id]);
             }
 
             event(new Registered($user));
@@ -165,11 +136,19 @@ class UserController extends Controller
 
             //Auth::login($user);
             \DB::commit();
+            if($isAdmin){
+                if($userRol == "ADMIN"){ $action = "/getAdmins"; }
+                if($userRol == "DOCTOR"){ $action = "/getDoctors";}
+                if($userRol == "PATIENT"){ $action = "/getPatients"; }
+                if($userRol == "SECRETARY"){ $action = "/getSecretaries"; }
+                return redirect($action);
+            }
+
             return redirect('/');
         }catch(\Exception $e){
             \DB::rollback();
             \Log::info($e);
-            return redirect()->back()->withErrors(["error" => "Algo ha fallado"]);
+            return redirect()->back()->withErrors(["errors" => "Algo ha fallado"]);
         }
     }
 
@@ -192,13 +171,11 @@ class UserController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:255'],
             'birthdate' => ['required', 'date'],
+            'doctor_hierarchy_id' => ['required', 'numeric'],
             'email' => ['required', 'string', 'email', 'max:255', $uniqueEmailRule],
             'ci' => ['required', 'numeric', $uniqueCiRule],
         ];
-        if($userRol == "DOCTOR"){
-            $validationRules['hierarchy'] = ['required', 'string', 'max:255'];
-            $validationRules['specialty'] = ['required', 'string', 'max:255'];
-        }
+
         $request->validate($validationRules);
         try{
             $user = User::find($request->id);
@@ -207,17 +184,11 @@ class UserController extends Controller
             $user->last_name = $request->last_name;
             $user->ci =  $request->ci_type . $request->ci;
             $user->email = $request->email;
+            $user->doctor_hierarchy_id = $request->doctor_hierarchy_id;
             $user->birthdate = $request->birthdate;
             $user->phone = $request->phone;
 
             $user->save();
-
-            if($userRol == "DOCTOR"){
-                $doctor = Doctor::where('user_id', $user->id)->update([
-                    'hierarchy' => $request->hierarchy,
-                    'specialty' => $request->specialty,
-                ]);
-            }
 
             //Auth::login($user);
             if($userRol == "PATIENT") $urlBack = "/getPatients";
@@ -232,35 +203,68 @@ class UserController extends Controller
         }catch(\Exception $e){
             \DB::rollback();
             \Log::info($e);
-            return redirect()->back()->withErrors(["error" => "Algo ha fallado"]);
+            return redirect()->back()->withErrors(["errors" => "Algo ha fallado"]);
         }
     }
 
 
 
     public function updateUserView(Request $request, String $userRol){
+        $jerarquiasDoctor  = [];
         if($userRol == "PATIENT") $title = "Actualizar Paciente";
-        if($userRol == "DOCTOR") $title = "Actualizar Doctor";
+        if($userRol == "DOCTOR") {
+            $title = "Actualizar Doctor";
+            $jerarquiasDoctor  = \App\Models\DoctorHierarchy::all();
+
+        }
         if($userRol == "SECRETARY") $title = "Actualizar Secretario";
         if($userRol == "ADMIN") $title = "Actualizar Administrador";
 
-        $user = User::with('doctorData')->find($request->id);
+        $user = User::find($request->id);
         $updateType = "update".ucfirst(strtolower($userRol));
-        return view('admin.users.update', compact("title", "user", "updateType"));
+        return view('admin.users.update', compact("title", "user", "updateType", "jerarquiasDoctor"));
+    }
+
+    public function deleteUser(Request $request){
+        \DB::beginTransaction();
+        try{
+            if( ( \Auth::user()->rol != "ADMIN" && $user->rol != "PATIENT") || \Auth::user()->rol == "PATIENT" )
+                return redirect('/forbidden');
+            $user = User::find($request->user_id);
+            $user->delete();
+            session()->flash("success", "Usuario eliminado con exito");
+
+            \DB::commit();
+
+            return redirect()->back();
+        }catch(\Exception $e){
+            \DB::rollback();
+            \Log::info($e);
+            return redirect()->back()->withErrors(["errors" => "Algo ha fallado"]);
+        }
     }
 
     public function getUserList(Request $request, $rol){
 
         $searchTerms = $request->input();
-
-        if($rol == "ADMIN")
+        $jerarquiasDoctor = [];
+        if($rol == "ADMIN"){
+            $registerType = "/admin/registerAdmin";
             $action = "/getAdmins";
-        if($rol == "DOCTOR")
+        }
+        if($rol == "DOCTOR"){
+            $registerType = "/admin/registerDoctor";
             $action = "/getDoctors";
-        if($rol == "PATIENT")
+            $jerarquiasDoctor = \App\Models\DoctorHierarchy::all();
+        }
+        if($rol == "PATIENT"){
+            $registerType = "/admin/registerPatient";
             $action = "/getPatients";
-        if($rol == "SECRETARY")
+        }
+        if($rol == "SECRETARY"){
+            $registerType = "/admin/registerSecretary";
             $action = "/getSecretaries";
+        }
 
         $users = User::where('rol', $rol)
             ->when(($request->name), function($q) use($request){
@@ -275,14 +279,9 @@ class UserController extends Controller
             ->when(($request->ci), function($q) use($request){
                 $q->where("ci", $request->ci);
             })
-            ->when(($request->hierarchy), function($q) use($request){
-                $q->whereHas('doctorData',function($q2) use($request){
-                    $q->where("hierarchy", $request->hierarchy);
-                });
-            })
-            ->when(($request->specialty), function($q) use($request){
-                $q->whereHas('doctorData',function($q2) use($request){
-                    $q->where("specialty", $request->specialty);
+            ->when(($request->doctor_hierarchy_id), function($q) use($request){
+                $q->whereHas('doctorHierarchy',function($q2) use($request){
+                    $q2->where("doctor_hierarchy_id", $request->doctor_hierarchy_id);
                 });
             })
             ->orderBy('name','ASC')
@@ -290,7 +289,43 @@ class UserController extends Controller
             ->paginate(25);
         $title = "Lista de usuarios";
 
-        return view('admin.users.get-users-list', compact('users', 'title', "rol", "action", "searchTerms"));
+        return view('admin.users.get-users-list', compact('users', 'title', "rol", "action", "searchTerms", "jerarquiasDoctor", 'registerType'));
     }
+
+
+    public function changeUserPasswordView(Request $request, $id){
+        $user = User::find($id);
+        if(( \Auth::id() != $id ) && ( \Auth::user()->rol != "ADMIN" && $user->rol != "PATIENT") )
+            return redirect('/forbidden');
+        $title = "Cambiar contraseña ".$user->fullName()."";
+        return view('admin.users.cambiar-contraseña', compact(['title', 'id', 'user']) );
+    }
+
+    public function changeUserPassword(Request $request){
+        $request->validate($request, [
+            'user_id' => 'required',
+            'password' => 'min:4|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'min:4'
+            ]);
+
+        $user = User::find($request->user_id);
+
+        $user->password = \Hash::make($request->password);
+        $user->save();
+
+        session()->flash("success", "Contraseña de usuario actualizada con exito");
+
+        if(\Auth::user()->rol != "PATIENT"){
+            if($userRol == "PATIENT") $urlBack = "/getPatients";
+            if($userRol == "DOCTOR") $urlBack = "/getDoctors";
+            if($userRol == "SECRETARY") $urlBack = "/getSecretaries";
+            if($userRol == "ADMIN") $urlBack = "/getAdmins";
+            return redirect($action);
+        }
+        return redirect('/dashboard');
+    }
+
+
+
 
 }

@@ -15,27 +15,27 @@ class ReferecesController extends Controller
         $reference->doctor_id = \Auth::id();
         $reference->exams = $request->exams;
         $reference->save();
-        session()->flash("success", "Examen creado con exito");
+        session()->flash("success", "Referencia creado con exito");
 
-        return redirect("/administrarExamenesPaciente/".$request->id);
+        return redirect("/referenciasPaciente/".$request->id);
     }
 
     public function create(Request $request){
         $patient = \App\Models\User::find($request->id);
-        $title = "Nuevo examen";
-        $action = '/crearExamenPaciente';
+        $title = "Nueva referencia";
+        $action = '/crearReferenciaPaciente';
         $method = "POST";
-        return view('admin.examenes.formulario-examenes', compact('title', 'patient', 'action', "method"));
+        return view('admin.examenes.formulario-referencias', compact('title', 'patient', 'action', "method"));
     }
 
     public function updateView(Request $request){
         $reference = \App\Models\Reference::find($request->id);
         $patient = \App\Models\User::find($reference->patient_id);
-        $title = "Modificar examen";
-        $action = '/modificarExamenPaciente';
+        $title = "Modificar referencia";
+        $action = '/modificarReferenciaPaciente';
         $method = "PUT";
 
-        return view('admin.examenes.formulario-examenes', compact('title', 'patient', 'reference', 'action', 'method'));
+        return view('admin.examenes.formulario-referencias', compact('title', 'patient', 'reference', 'action', 'method'));
     }
 
     public function update(Request $request){
@@ -43,25 +43,25 @@ class ReferecesController extends Controller
         $patient = \App\Models\User::find($reference->patient_id);
         $reference->exams = $request->exams;
         $reference->save();
-        session()->flash("success", "Examen actualizado con exito");
-        return redirect("/administrarExamenesPaciente/".$patient->id);
+        session()->flash("success", "Referencia actualizado con exito");
+        return redirect("/referenciasPaciente/".$patient->id);
     }
 
     public function delete(Request $request){
         $reference = \App\Models\Reference::find($request->id);
         $patient_id = $reference->patient_id;
         $reference->delete();
-        session()->flash("success", "Examen eliminado con exito");
-        return redirect("/administrarExamenesPaciente/".$patient_id);
+        session()->flash("success", "Referencia eliminado con exito");
+        return redirect("/referenciasPaciente/".$patient_id);
     }
 
     public function getPatientReferences(Request $request){
         if(\Auth::user()->rol == "PATIENT" && \Auth::id() != $request->id)
             return redirect('forbidden');
         $patient = \App\Models\User::find($request->id);
-        $title = "Examenes mandados";
+        $title = "Referencias mandados";
         $references = \App\Models\Reference::where('patient_id', $patient->id)->orderBy('created_at','DESC')->paginate(25);
-        return view('admin.examenes.lista-examenes-paciente', compact('patient','references','title'));
+        return view('admin.examenes.lista-referencias-paciente', compact('patient','references','title'));
     }
 
 

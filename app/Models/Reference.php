@@ -23,4 +23,9 @@ class Reference extends Model
     public function patient(){
         return $this->belongsTo(User::class, 'patient_id')->where('rol', strtoupper('patient'));
     }
+
+    public function resultado()
+    {
+        return $this->hasOne(ExamResult::class, 'reference_id');
+    }
 }

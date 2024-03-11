@@ -9,7 +9,7 @@
 
 <body class="bg-gradient-primary">
   <div class="container">
-  
+
             <div class="card o-hidden border-0 shadow-lg my-2">
                 <div class="card-body p-0">
 
@@ -29,7 +29,7 @@
                                     <th scope="col">Edad gestacional por FPE</th>
                                     <th scope="col">Tension Arterial</th>
                                     <th scope="col">Altura uterina</th>
-                                    <th scope="col">Examenes fisicos</th>
+                                    <th scope="col">Referencias fisicos</th>
                                     <th scope="col">Conducta</th>
                                     <th scope="col">Operaciones</th>
                                     <th scope="col">Operaciones</th>
@@ -62,7 +62,7 @@
 
                                       <td><button type="submit" class="btn btn-primary btn-user btn-block">ELIMINAR</button></td>
                                   </form>
-                                    
+
 
                                   </tr>
                                 </tbody>
@@ -70,14 +70,14 @@
 
                               @endforeach
 
-                            
+
                               </table>
 
                       </div>
                   </div>
-          
+
  </div>
-        
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{Vite::asset('resources/vendor/jquery/jquery.min.js')}}"></script>
@@ -93,5 +93,5 @@
 
 </html>
 
-  
+
 @endsection

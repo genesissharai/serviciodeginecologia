@@ -64,20 +64,22 @@
         <!-- Proximas Citas -->
         <div class="card shadow mb-4 w-100">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Proximas Citas</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Lista de Citas</h6>
             </div>
             <div class="card-body">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="row">
-                        <div class="table-responsive">
+                        <div class="table-responsive w-100">
                             <table class="table table-striped">
                                 <thead>
                                     <th>
                                         Fecha
                                     </th>
-                                    <th>
-                                        Paciente
-                                    </th>
+                                    @if(\Auth::user()->rol != "PATIENT")
+                                        <th>
+                                            Paciente
+                                        </th>
+                                    @endif
                                     <th>
                                         Medico
                                     </th>
@@ -87,17 +89,35 @@
                                 </thead>
                                 @forelse ($nextSchedules as $schedule)
                                     <tr>
-                                        <td colspan="">{{ \Carbon\Carbon::parse($schedule->date)->format("y-m-d h:i A") }}</td>
-                                        <td colspan="">{{$schedule->patient->fullName()}}</td>
+                                        <td colspan="">{{ \Carbon\Carbon::parse($schedule->consultation_date)->format("Y-m-d h:i A") }}</td>
+                                        @if(\Auth::user()->rol != "PATIENT")
+                                            <td colspan="">{{$schedule->patient->fullName()}}</td>
+                                        @endif
                                         <td colspan="">{{$schedule->doctor->fullName()}}</td>
                                         <td colspan="">
+                                            @if($schedule->status == "PENDING")
+                                                @if(\Auth::user()->rol !== "PATIENT")
+                                                    <form id="marcarCitaAsistida-{{$schedule->id}}" data-id={{$schedule->id}} action="/marcarCitaAsistida" method="POST">
+                                                        @method('PATCH')
+                                                        @csrf
+                                                        <input type="text" hidden value={{$schedule->id}}>
+                                                        <button type="button" class="btn btn-sm btn-success btnCitaAsistida mb-2" data-id={{$schedule->id}} id="btnCitaAsistida-{{$schedule->id}}" value="btnCitaAsistida-{{$schedule->id}}">Marcar asistida</button>
+                                                    </form>
+                                                    <form id="marcarCitaNoAtendida-{{$schedule->id}}" data-id={{$schedule->id}} action="/marcarCitaNoAtendida" method="POST">
+                                                        @method('PATCH')
+                                                        @csrf
+                                                        <input type="text" hidden value={{$schedule->id}}>
+                                                        <button type="button" class="btn btn-sm btn-success btnCitaNoAsistida mb-2" data-id={{$schedule->id}} id="btnCitaNoAsistida-{{$schedule->id}}" value="btnCitaNoAsistida-{{$schedule->id}}">Marcar no asistida</button>
+                                                    </form>
+                                                @endif
                                                 <form id="cancelarCita-{{$schedule->id}}" data-id={{$schedule->id}} action="/cancelarCita" method="POST">
                                                     @method('DELETE')
                                                     @csrf
                                                     <input type="text" hidden value={{$schedule->id}}>
-                                                    <button type="button" class="btn btn-danger btnCancelarCita" data-id={{$schedule->id}} id="btnCancelarCita-{{$schedule->id}}" value="btnCancelarCita-{{$schedule->id}}">Cancelar</button>
+                                                    <button type="button" class="btn btn-sm btn-danger btnCancelarCita" data-id={{$schedule->id}} id="btnCancelarCita-{{$schedule->id}}" value="btnCancelarCita-{{$schedule->id}}">Cancelar</button>
                                                 </form>
-                                            </td>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <td colspan="">No hay citas disponibles...</td>

@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CitasController;
 use App\Http\Controllers\ReferecesController;
+use App\Http\Controllers\ResultadosExamenesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,7 +34,8 @@ Route::get('/registerAdmin', function () {
 })->name('registerAdmin');
 
 Route::get('/registerDoctor', function () {
-    return view('admin.register',["registerType"=>"registerDoctor", "loginType" => "loginDoctor"]);
+    $jerarquiasDoctor = \App\Models\DoctorHierarchy::all();
+    return view('admin.register',["registerType"=>"registerDoctor", "loginType" => "loginDoctor", "jerarquiasDoctor" => $jerarquiasDoctor]);
 })->name('registerDoctor');
 
 Route::get('/registerPatient', function () {
@@ -44,24 +46,30 @@ Route::get('/registerSecretary', function () {
     return view('admin.register',["registerType"=>"registerSecretary", "loginType" => "loginSecretary"]);
 })->name('registerSecretary');
 
+
+
+Route::get('/admin/registerAdmin', [UserController::class, 'adminRegisterAdminView'])->name('admin-registerAdmin');
+Route::get('/admin/registerDoctor', [UserController::class, 'adminRegisterDoctorView'])->name('admin-registerDoctor');
+Route::get('/admin/registerPatient', [UserController::class, 'adminRegisterPatientView'])->name('admin-registerPatient');
+Route::get('/admin/registerSecretary', [UserController::class, 'adminRegisterSecretaryView'])->name('admin-registerSecretary');
+
+
+
 //Update
-Route::get('/updateAdmin/{id}', [UserController::class, 'updateAdminView'])->name('updateAdmin');
+Route::get('/updateAdmin/{id}', [UserController::class, 'updateAdminView'])->middleware(['auth'])->name('updateAdmin');
+Route::get('/updateDoctor/{id}', [UserController::class, 'updateDoctorView'])->middleware(['auth'])->name('updateDoctor');
+Route::get('/updatePatient/{id}', [UserController::class, 'updatePatientView'])->middleware(['auth'])->name('updatePatient');
+Route::get('/updateSecretary/{id}', [UserController::class, 'updateSecretaryView'])->middleware(['auth'])->name('updateSecretary');
 
-Route::get('/updateDoctor/{id}', [UserController::class, 'updateDoctorView'])->name('updateDoctor');
 
-Route::get('/updatePatient/{id}', [UserController::class, 'updatePatientView'])->name('updatePatient');
 
-Route::get('/updateSecretary/{id}', [UserController::class, 'updateSecretaryView'])->name('updateSecretary');
 
 
 //List
-Route::get('/getAdmins', [UserController::class, 'getAdminList'])->name('getAdmins');
-
-Route::get('/getDoctors', [UserController::class, 'getDoctorList'])->name('getDoctors');
-
-Route::get('/getPatients', [UserController::class, 'getPatientList'])->name('getPatients');
-
-Route::get('/getSecretaries', [UserController::class, 'getSecretaryList'])->name('getSecretaries');
+Route::get('/getAdmins', [UserController::class, 'getAdminList'])->middleware(['auth'])->name('getAdmins');
+Route::get('/getDoctors', [UserController::class, 'getDoctorList'])->middleware(['auth'])->name('getDoctors');
+Route::get('/getPatients', [UserController::class, 'getPatientList'])->middleware(['auth'])->name('getPatients');
+Route::get('/getSecretaries', [UserController::class, 'getSecretaryList'])->middleware(['auth'])->name('getSecretaries');
 
 
 
@@ -70,13 +78,23 @@ Route::post('/registerDoctor', [UserController::class, 'registerDoctor']);
 Route::post('/registerPatient', [UserController::class, 'registerPatient']);
 Route::post('/registerSecretary', [UserController::class, 'registerSecretary']);
 
-Route::patch('/updateAdmin/{id}', [UserController::class, 'updateAdmin']);
-Route::patch('/updateDoctor/{id}', [UserController::class, 'updateDoctor']);
-Route::patch('/updatePatient/{id}', [UserController::class, 'updatePatient']);
-Route::patch('/updateSecretary/{id}', [UserController::class, 'updateSecretary']);
 
 
+Route::post('/admin/registerAdmin', [UserController::class, 'adminRegisterAdmin'])->middleware(['auth']);
+Route::post('/admin/registerDoctor', [UserController::class, 'adminRegisterDoctor'])->middleware(['auth']);
+Route::post('/admin/registerPatient', [UserController::class, 'adminRegisterPatient'])->middleware(['auth']);
+Route::post('/admin/registerSecretary', [UserController::class, 'adminRegisterSecretary'])->middleware(['auth']);
 
+
+Route::patch('/updateAdmin/{id}', [UserController::class, 'updateAdmin'])->middleware(['auth']);
+Route::patch('/updateDoctor/{id}', [UserController::class, 'updateDoctor'])->middleware(['auth']);
+Route::patch('/updatePatient/{id}', [UserController::class, 'updatePatient'])->middleware(['auth']);
+Route::patch('/updateSecretary/{id}', [UserController::class, 'updateSecretary'])->middleware(['auth']);
+
+
+Route::get('changeUserPassword/{id}',[UserController::class, 'changeUserPasswordView'])->middleware(['auth']);
+Route::patch('changeUserPassword', [UserController::class, 'changeUserPassword'])->middleware(['auth']);
+Route::delete('deleteUser', [UserController::class, 'deleteUser'])->middleware(['auth']);
 
 
 
@@ -112,7 +130,13 @@ Route::post('/agendarCita/{id}',[CitasController::class, 'scheduleConsultation']
 
 Route::get('/buscarPaciente', [CitasController::class, 'searchPatients'])->middleware(['auth']);
 
+Route::get('listaCitasPaciente/{id}', [CitasController::class, 'getSchedulesPatient'])->middleware(['auth']);
+Route::get('listaCitasDoctor/{id}', [CitasController::class, 'getSchedulesDoctor'])->middleware(['auth']);
+Route::get('listaCitas', [CitasController::class, 'getSchedules'])->middleware(['auth']);
+
 Route::delete('/cancelarCita', [CitasController::class, 'cancelSchedule'])->middleware(['auth']);
+Route::patch('/marcarCitaAsistida', [CitasController::class, 'markAsAttended'])->middleware(['auth']);
+Route::patch('/marcarCitaNoAtendida', [CitasController::class, 'markAsUnattended'])->middleware(['auth']);
 
 /**
  *
@@ -120,10 +144,17 @@ Route::delete('/cancelarCita', [CitasController::class, 'cancelSchedule'])->midd
  *
  */
 
-Route::get('/administrarExamenesPaciente/{id}', [ReferecesController::class, 'getPatientReferences'])->middleware(['auth']);
-Route::get('/crearExamenPaciente/{id}', [ReferecesController::class, 'create'])->middleware(['auth']);
-Route::post('/crearExamenPaciente/{id}', [ReferecesController::class, 'store'])->middleware(['auth']);
-Route::get('/modificarExamenPaciente/{id}', [ReferecesController::class, 'updateView'])->middleware(['auth']);
-Route::put('/modificarExamenPaciente/{id}', [ReferecesController::class, 'update'])->middleware(['auth']);
-Route::delete('/eliminarExamenPaciente/{id}', [ReferecesController::class, 'delete'])->middleware(['auth']);
+Route::get('/referenciasPaciente/{id}', [ReferecesController::class, 'getPatientReferences'])->middleware(['auth']);
+Route::get('/crearReferenciaPaciente/{id}', [ReferecesController::class, 'create'])->middleware(['auth']);
+Route::post('/crearReferenciaPaciente/{id}', [ReferecesController::class, 'store'])->middleware(['auth']);
+Route::get('/modificarReferenciaPaciente/{id}', [ReferecesController::class, 'updateView'])->middleware(['auth']);
+Route::put('/modificarReferenciaPaciente/{id}', [ReferecesController::class, 'update'])->middleware(['auth']);
+Route::delete('/eliminarReferenciaPaciente/{id}', [ReferecesController::class, 'delete'])->middleware(['auth']);
+
+Route::get('/resultadosExamenesPaciente/{id}', [ResultadosExamenesController::class, 'getPatientReferences'])->middleware(['auth']);
+Route::get('/registrarResultadoExamenPaciente/{id}', [ResultadosExamenesController::class, 'create'])->middleware(['auth']);
+Route::post('/registrarResultadoExamenPaciente/{id}', [ResultadosExamenesController::class, 'store'])->middleware(['auth']);
+Route::get('/modificarResultadoExamenPaciente/{id}', [ResultadosExamenesController::class, 'updateView'])->middleware(['auth']);
+Route::put('/modificarResultadoExamenPaciente/{id}', [ResultadosExamenesController::class, 'update'])->middleware(['auth']);
+Route::delete('/eliminarResultadoExamenPaciente/{id}', [ResultadosExamenesController::class, 'delete'])->middleware(['auth']);
 

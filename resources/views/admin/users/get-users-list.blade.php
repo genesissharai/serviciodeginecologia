@@ -9,26 +9,27 @@
                     <div>
                         <form action="{{$action}}" method="GET">
                             <div class="row">
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-6">
                                     <label for="">Nombre</label>
-                                    <input type="text" class="form-control" name="name" @if(isset($searchTerms["name"])) value="{{$searchTerms["name"]}}"  @endif>
+                                    <input type="text" class="form-control" name="name" id="name" @if(isset($searchTerms["name"])) value="{{$searchTerms["name"]}}"  @endif>
                                 </div>
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-6">
                                     <label for="">Correo</label>
                                     <input type="text" class="form-control" name="email" @if(isset($searchTerms["email"])) value="{{$searchTerms["email"]}}"  @endif>
                                 </div>
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-6">
                                     <label for="">Cedula</label>
                                     <input type="text" class="form-control" name="ci" @if(isset($searchTerms["ci"])) value="{{$searchTerms["ci"]}}"  @endif>
                                 </div>
                                 @if($rol == "DOCTOR")
                                     <div class="col-12 col-md-6">
                                         <label for="">Jerarquia</label>
-                                        <input type="text" class="form-control" name="hierarchy" @if(isset($searchTerms["hierarchy"])) value="{{$searchTerms["hierarchy"]}}"  @endif>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <label for="">Especialidad</label>
-                                        <input type="text" class="form-control" name="specialty" @if(isset($searchTerms["specialty"])) value="{{$searchTerms["specialty"]}}"  @endif>
+                                        <select name="doctor_hierarchy_id" class="form-control" id="jerarquia">
+                                                <option value="">Seleccionar jerarquia</option>
+                                            @foreach ($jerarquiasDoctor as $jerarquia)
+                                                <option value="{{$jerarquia->id}}" @if(isset($searchTerms["doctor_hierarchy_id"]) && $searchTerms["doctor_hierarchy_id"] == $jerarquia->id) selected @endif >{{$jerarquia->hierarchy}} - {{$jerarquia->specialty}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 @endif
                             </div>
@@ -36,6 +37,13 @@
                         </form>
                     </div>
                     <hr>
+
+                    @if (\Auth::user()->rol != "PATIENT")
+                        @if(($rol == "PATIENT") || (\Auth::user()->rol == "ADMIN"))
+                            <a class="btn btn-primary mb-3" href="{{$registerType}}">Nuevo usuario</a>
+                        @endif
+                    @endif
+
                     <div class="table-responsive">
                         {{$users->links()}}
 
@@ -66,8 +74,8 @@
                                         <td>{{$user->phone}}</td>
                                         <td>{{$user->birthdate}}</td>
                                         @if($rol == "DOCTOR")
-                                            <td>{{$user->specialty}}</td>
-                                            <td>{{$user->hierarchy}}</td>
+                                            <td>{{$user->doctorHierarchy->specialty ?? ''}}</td>
+                                            <td>{{$user->doctorHierarchy->hierarchy ?? ''}}</td>
                                         @endif
                                         <td>@if($user->status)Activo @else Inactivo @endif</td>
                                         @if(\Auth::user()->rol !== "PATIENT")
@@ -77,15 +85,26 @@
                                                     <div class="col-12">
                                                         <a href="/update{{ucfirst(strtolower($user->rol))}}/{{$user->id}}" class="btn btn-warning">Actualizar</a>
                                                     </div>
+                                                    <div class="col-12">
+                                                        <form action="/deleteUser" method="post">
+                                                            @csrf()
+                                                            @method('delete')
+                                                            <input type="text" name="user_id" hidden value="{{$user->id}}" id="">
+                                                            <button type="submit" class="btn btn-danger mt-2">Eliminar</button>
+                                                        </form>
+                                                    </div>
                                                 @endif
                                                 @if(\Auth::user()->rol == "DOCTOR" && ($user->rol == "PATIENT"))
                                                     <div class="col-12">
-                                                        <a href="/administrarExamenesPaciente/{{$user->id}}" class="btn btn-sm btn-info mt-2" disabled>Examenes</a>
+                                                        <a href="/referenciasPaciente/{{$user->id}}" class="btn btn-sm btn-info mt-2" disabled>Examenes</a>
                                                     </div>
+                                                    {{-- <div class="col-12">
+                                                        <a href="/resultadosExamenesPaciente/{{$user->id}}" class="btn btn-sm btn-info mt-2" disabled>Resultados de examenes</a>
+                                                    </div> --}}
                                                 @endif
-                                                @if(\Auth::user()->rol == "ADMIN")
+                                                @if(\Auth::user()->rol == "ADMIN" ||  ($user->rol == "PATIENT" && \Auth::user()->rol != "PATIENT"))
                                                     <div class="col-12">
-                                                        <a href="/cambiarContraseñaUsuario/{{$user->id}}" class="btn btn-sm btn-info mt-2" disabled>Cambiar contraseña</a>
+                                                        <a href="/changeUserPassword/{{$user->id}}" class="btn btn-sm btn-info mt-2" disabled>Cambiar contraseña</a>
                                                     </div>
                                                 @endif
                                             </td>

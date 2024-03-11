@@ -63,7 +63,6 @@
                                     <div class="col-3 d-flex align-items-center">
                                         <select class="form-control form-select" id="tipo_cedula" name="ci_type" required>
                                             <option value="V-" selected> V </option>
-                                            <option value="J-"> J </option>
                                             <option value="E-"> E </option>
                                         </select>
                                     </div>
@@ -89,21 +88,20 @@
                                 @if($registerType == "registerDoctor")
                                     <div class="form-group row">
                                         <div class="col-sm-12 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" required
-                                                id="especialidad" name="specialty" placeholder="Especialidad">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-12 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" required
-                                                id="jerarquia" name="hierarchy" placeholder="Jerarquia">
+                                            <label for="">Jerarquia</label>
+                                            <select name="doctor_hierarchy_id" class="form-control" id="jerarquia">
+                                                @foreach ($jerarquiasDoctor as $jerarquia)
+                                                    <option value="{{$jerarquia->id}}">{{$jerarquia->hierarchy}} - {{$jerarquia->specialty}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 @endif
                                 <div class="form-group row">
                                     <div class="col-sm-12 mb-3 mb-sm-0">
+                                        <label for="" >Contraseña</label>
                                         <input type="password" class="form-control form-control-user" required
-                                            id="contraseña" name="password" placeholder="password">
+                                            id="contraseña" name="password" placeholder="Password">
                                     </div>
                                     {{-- <div class="col-sm-6">
                                         <input type="password" class="form-control form-control-user"

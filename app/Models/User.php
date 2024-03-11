@@ -27,6 +27,7 @@ class User extends Authenticatable
         'email',
         'password',
         'status',
+        'doctor_hierarchy_id',
     ];
 
     /**
@@ -55,13 +56,23 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user associated with the User
+     *
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function doctorData(){
         return $this->hasOne(Doctor::class);
     }
+
+    /**
+     *
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function doctorHierarchy(){
+        return $this->belongsTo(DoctorHierarchy::class, 'doctor_hierarchy_id');
+    }
+
 
 
 }

@@ -11,7 +11,73 @@ class CitasController extends Controller
 {
     //
 
+    public function getSchedulesPatient(Request $request, $id){
+        $searchTerms = $request->all();
+        $action = "/listaCitasPaciente/$id";
+        $user = User::find($id);
+        if(\Auth::user()->id != $id && \Auth::user()->rol != "PATIENT"){
+            return redirect('/forbidden');
+        }
+        if(!$request->fecha_inico && !$request->fecha_fin){
+            $request->fecha_inicio = \Carbon\Carbon::now();
+        }
+        $schedules = MedicalConsultation::where('patient_id',$id)
+                    ->when($request->fecha_inicio, function($q) use($request){
+                        $q->whereDate('consultation_date', ">=" , ($request->fecha_inicio));
+                    })
+                    ->when($request->fecha_fin, function($q) use($request){
+                        $q->whereDate('consultation_date', "<=" ,  ($request->fecha_fin));
+                    })
+                    ->orderBy('consultation_date','ASC')
+                    ->paginate(25);
+        $title = "Citas programadas";
+        return view('admin.citas.lista-citas', compact('title','searchTerms','schedules','action'));
+    }
 
+    public function getSchedulesDoctor(Request $request, $id){
+        $searchTerms = $request->all();
+        $action = "/listaCitasDoctor/$id";
+        $user = User::find($id);
+        if(\Auth::user()->id != $id && \Auth::user()->rol != "PATIENT" && \Auth::user()->rol != "DOCTOR"){
+            return redirect('/forbidden');
+        }
+        if(!$request->fecha_inico && !$request->fecha_fin){
+            $request->fecha_inicio = \Carbon\Carbon::now();
+        }
+        $schedules = MedicalConsultation::where('doctor_id',$id)
+                    ->when($request->fecha_inicio, function($q) use($request){
+                        $q->whereDate('consultation_date', ">=" , ($request->fecha_inicio));
+                    })
+                    ->when($request->fecha_fin, function($q) use($request){
+                        $q->whereDate('consultation_date', "<=" ,  ($request->fecha_fin));
+                    })
+                    ->orderBy('consultation_date','ASC')
+                    ->paginate(25);
+        $title = "Citas programadas";
+        return view('admin.citas.lista-citas', compact('title','searchTerms','schedules','action'));
+    }
+
+    public function getSchedules(Request $request){
+        $searchTerms = $request->all();
+        $action = "/listaCitas";
+        if(\Auth::user()->rol == "PATIENT"){
+            return redirect('/forbidden');
+        }
+        if(!$request->fecha_inico && !$request->fecha_fin){
+            $request->fecha_inicio = \Carbon\Carbon::now();
+        }
+        $schedules = MedicalConsultation::
+                    when($request->fecha_inicio, function($q) use($request){
+                        $q->whereDate('consultation_date', ">=" , ($request->fecha_inicio));
+                    })
+                    ->when($request->fecha_fin, function($q) use($request){
+                        $q->whereDate('consultation_date', "<=" ,  ($request->fecha_fin));
+                    })
+                    ->orderBy('consultation_date','ASC')
+                    ->paginate(25);
+        $title = "Citas programadas";
+        return view('admin.citas.lista-citas', compact('title','searchTerms','schedules','action'));
+    }
 
     public function selectDoctorForAvailabilityPlanning(Request $request){
         // SI ES PACIENTE NEGARLE PERMISOS
@@ -173,7 +239,7 @@ class CitasController extends Controller
             ->where('status', strtoupper("pending"))->get();
             // if($now->greaterThan($scheduledDay->start) && $now->diffInHours($scheduledDay->start) < 24) $scheduledDay->title = 'Hoy';
 
-            if($now->greaterThan($scheduledDay->start) && $now->diffInHours($scheduledDay->start) < 24) {
+            if(($now->greaterThan($scheduledDay->start))) {
                 $scheduledDay->title = 'No disponible';
                 $scheduledDay->available = false;
             }
@@ -202,7 +268,7 @@ class CitasController extends Controller
 
         $schedules = $patientSchedule = MedicalConsultation::
         where('doctor_id', $request->id_doctor)
-        ->when($user->rol == "PATIENT", function($q){
+        ->when($user->rol == "PATIENT", function($q) use($request){
             $q->where('patient_id', $request->id);
         })
         ->where('consultation_date', ">=", $now->toDateString())
@@ -235,11 +301,29 @@ class CitasController extends Controller
         return $users;
     }
 
-    public function cancelSchedule(Request $request) {
+    public function cancelSchedule(Request $request) { return $this->changeScheduleStatus($request, 'canceled'); }
+    public function markAsAttended(Request $request) {
 
+        $result = $this->changeScheduleStatus($request, 'attended');
+        // session()->flash("success", "Cita actualizada con exito");
+
+        return redirect()->back();
+
+    }
+    public function markAsUnattended(Request $request) {
+
+        $result = $this->changeScheduleStatus($request, 'unattended');
+        // session()->flash("success", "Cita actualizada con exito");
+
+        return redirect()->back();
+
+    }
+
+
+    public function changeScheduleStatus(Request $request, $status){
         $schedule = MedicalConsultation::find($request->id);
 
-        $schedule->status = strtoupper('canceled');
+        $schedule->status = strtoupper($status);
         $schedule->save();
 
         return ["success" => true];

@@ -27,7 +27,7 @@
                                     <i class="far fa-arrow-to-left"></i>
                                     <u>Volver al inicio</u></a>
                             </div>
-                           
+
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
@@ -111,7 +111,7 @@
                                                 id="au" placeholder="">
                                         </div>
                                         <div class="col">
-                                            <Strong>Examen Fisico</Strong>
+                                            <Strong>Referencia Fisico</Strong>
                                             <input type="int" class="form-control form-control-user" name="physical_exam"
                                                 id="physical_exam" placeholder="">
                                         </div>
@@ -124,8 +124,8 @@
                                         </div>
 
                                         </div>
-                                    
-                
+
+
                                         <div class="d-flex justify-content-center w-40" >
                                             <button type="submit" class="btn btn-primary btn-user" justify-content= "center">
                                              REGISTRAR
@@ -154,7 +154,7 @@
 </div>
 
     </div>
-        
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{Vite::asset('resources/vendor/jquery/jquery.min.js')}}"></script>
@@ -170,5 +170,5 @@
 
 </html>
 
-  
+
 @endsection

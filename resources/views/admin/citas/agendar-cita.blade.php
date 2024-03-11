@@ -14,7 +14,7 @@
                 <input type="text" hidden id="calendarType" value="scheduleDate" >
                 <input type="text" hidden id="selectedDoctor" value="{{$doctorId}}" >
                 @if(\Auth::user()->rol == "PATIENT")
-                    <input type="text" hidden id="selectedPatient" value="{{$patientId}}" >
+                    <input type="text" hidden id="selectedPatient" value="{{\Auth::id()}}" >
                 @else
                     <input type="text" hidden id="selectedPatient" value="">
                     <h4>Buscar paciente:</h4>

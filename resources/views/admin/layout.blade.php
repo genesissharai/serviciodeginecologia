@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <base href="localhost/serviciodeginecologia/public/">
 
-    <title>Hospital Raúl Leoni - Blank</title>
+    <title>Hospital Raúl Leoni - {{$title}}</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{Vite::asset('resources/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -32,9 +32,9 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{url('/')}}">
+                <div class="sidebar-brand-icon">
+                    <img style="max-height: 5rem;" src="{{Vite::asset('resources/img/logo-hospital-raul-leoni-no-bg.png')}}" alt="">
                 </div>
                 <div class="sidebar-brand-text mx-3">Hospital Raúl Leoni</div>
             </a>
@@ -44,7 +44,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="{{url('dashboard')}}">
+                <a class="nav-link" href="{{url('/dashboard')}}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -89,7 +89,10 @@
 
             @if(\Auth::user()->rol == "PATIENT")
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url('/administrarExamenesPaciente/'.\Auth::id())}}">
+                    <a class="nav-link" href="{{url('/referenciasPaciente/'.\Auth::id())}}">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Referencias</span></a>
+                    <a class="nav-link" href="{{url('/ExamenesPaciente/'.\Auth::id())}}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Examenes</span></a>
                 </li>
@@ -104,7 +107,17 @@
                 <div id="collapseConsultations" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
-                        <a class="collapse-item" href="{{url('/agendarDisponibilidad')}}">Disponibilidad doctor</a>
+                        @if(\Auth::user()->rol != "PATIENT")
+                            @if(\Auth::user()->rol == "DOCTOR")
+                                <a class="collapse-item"  href="{{url('/listaCitasDoctor/'.\Auth::id())}}">Ver proximas citas</a>
+                            @else
+                                <a class="collapse-item"  href="{{url('/listaCitas')}}">Ver proximas citas</a>
+                            @endif
+                            <a class="collapse-item" href="{{url('/agendarDisponibilidad')}}">Disponibilidad doctor</a>
+                        @endif
+                        @if(\Auth::user()->rol == "PATIENT")
+                            <a class="collapse-item"  href="{{url('/listaCitasPaciente/'.\Auth::id())}}">Ver proximas citas</a>
+                        @endif
                         <a class="collapse-item"  href="{{url('/agendarCita')}}">Agendar citas</a>
                     </div>
                 </div>
@@ -153,6 +166,14 @@
                     </div>
                 </div>
 
+            </li>
+
+            <hr class="sidebar-divider my-2 mb-0">
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Logout
+                </a>
             </li>
 
         </ul>
@@ -339,17 +360,17 @@
                                 @php
                                     $user = \Auth::user();
                                 @endphp
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{$user->name}} {{$user->last_name}}</span>
+                                <span class="mr-2 d-inline text-gray-600 small">{{$user->name}} {{$user->last_name}}</span>
                                 {{-- <img class="img-profile rounded-circle"
                                     src="{{Vite::asset('resources/img/undraw_profile.svg')}}"> --}}
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="javascript:void(0)" {{-- href="/perfil" --}}>
+                                {{-- <a class="dropdown-item" href="javascript:void(0)" href="/perfil">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
-                                </a>
+                                </a> --}}
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -391,8 +412,8 @@
                                     {{$success}}
                                 </ul>
                             </div>
-                        </d
-
+                        </div>
+                    </div>
                     @endif
                     @yield('content')
 
@@ -446,7 +467,6 @@
             </div>
         </div>
     </div>
-
 
 </body>
 

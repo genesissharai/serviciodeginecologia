@@ -32,7 +32,6 @@
                             <div class="col-3 d-flex align-items-center">
                                 <select class="form-control form-select" id="tipo_cedula" name="ci_type" required>
                                     <option value="V-" @if(count(explode("-",$user->ci)) && explode("-",$user->ci)[0] == "V") selected @endif> V </option>
-                                    <option value="J-" @if(count(explode("-",$user->ci)) && explode("-",$user->ci)[0] == "J") selected @endif> J </option>
                                     <option value="E-" @if(count(explode("-",$user->ci)) && explode("-",$user->ci)[0] == "E") selected @endif> E </option>
                                 </select>
                             </div>
@@ -61,19 +60,15 @@
                                     id="telefono" name="phone" placeholder="Telefono">
                             </div>
                         </div>
-                        @if($updateType == "registerDoctor")
-                            <div class="form-group row">
-                                <div class="col-sm-12 mb-3 mb-sm-0">
-                                    <label for="">Especialidad</label>
-                                    <input type="text" class="form-control form-control-user" required value="{{$user->doctorData->specialty}}"
-                                        id="especialidad" name="specialty" placeholder="Especialidad">
-                                </div>
-                            </div>
+                        @if($updateType == "updateDoctor")
                             <div class="form-group row">
                                 <div class="col-sm-12 mb-3 mb-sm-0">
                                     <label for="">Jerarquia</label>
-                                    <input type="text" class="form-control form-control-user" required value="{{$user->doctorData->hierarchy}}"
-                                        id="jerarquia" name="hierarchy" placeholder="Jerarquia">
+                                    <select name="doctor_hierarchy_id" class="form-control" id="jerarquia">
+                                        @foreach ($jerarquiasDoctor as $jerarquia)
+                                            <option value="{{$jerarquia->id}}" @if($user->doctor_hierarchy_id == $jerarquia->id) selected @endif>{{$jerarquia->hierarchy}} - {{$jerarquia->specialty}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         @endif

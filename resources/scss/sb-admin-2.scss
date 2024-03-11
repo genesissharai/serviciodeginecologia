@@ -18,3 +18,13 @@
 @import "login.scss";
 @import "error.scss";
 @import "footer.scss";
+
+
+
+.ck.ck-balloon-panel.ck-balloon-panel_position_border-side_right.ck-powered-by-balloon{
+    display: none;
+}
+
+@import "quill/dist/quill.core.css";
+@import "froala-editor/css/froala_style.min.css";
+@import "jodit/es2021/jodit.min.css"

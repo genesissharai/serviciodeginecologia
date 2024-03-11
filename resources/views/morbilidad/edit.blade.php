@@ -27,7 +27,7 @@
                                     <i class="far fa-arrow-to-left"></i>
                                     <u>Volver al inicio</u></a>
                             </div>
-                           
+
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
@@ -100,7 +100,7 @@
                                                 <input type="text" class="form-control" value="{{$morbidities->au}}" name="au">
                                               </div>
                                               <div class="col">
-                                                <Strong>Examenes Fisicos</Strong>
+                                                <Strong>Referencias Fisicos</Strong>
                                                  <input type="text" class="form-control" value="{{$morbidities->physical_exam}}" name="physical_exam">
                                                </div>
                                             </div>
@@ -131,7 +131,7 @@
         </div>
 
     </div>
-        
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{Vite::asset('resources/vendor/jquery/jquery.min.js')}}"></script>
@@ -147,5 +147,5 @@
 
 </html>
 
-  
+
 @endsection
