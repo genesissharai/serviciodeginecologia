@@ -9,7 +9,7 @@
 
 <body class="bg-gradient-primary">
 
-    <div class="container">
+    <div class="container-fluid">
 
 
 
@@ -134,7 +134,6 @@
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="">¡Registrarse!</a>
 
 
                                     </div>

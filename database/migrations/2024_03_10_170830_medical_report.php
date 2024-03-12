@@ -14,6 +14,18 @@ return new class extends Migration
     public function up()
     {
         //
+        Schema::create('medical_reports', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('title')->nullable();
+            $table->longText('report')->nullable();
+            $table->unsignedBigInteger('doctor_id');
+            $table->foreign('doctor_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('consultation_id')->nullable();
+            $table->foreign('consultation_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('patient_id');
+            $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -24,5 +36,6 @@ return new class extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('medical_reports');
     }
 };

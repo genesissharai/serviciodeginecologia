@@ -8,9 +8,9 @@
 
 
 <body class="bg-gradient-primary">
-  <div class="container">
+  <div class="">
 
-            <div class="card o-hidden border-0 shadow-lg my-2">
+            <div class="card w-100 o-hidden border-0 shadow-lg my-2">
                 <div class="card-body p-0">
 
 

@@ -12,7 +12,7 @@
                 <div class="table-responsive">
                     {{$references->links()}}
 
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-bordered">
                         <thead>
                             <th style="width: 10%;">Fecha creado</th>
                             <th style="width: 10%;">Mandado por</th>

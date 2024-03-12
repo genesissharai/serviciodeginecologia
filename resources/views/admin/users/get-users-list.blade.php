@@ -81,26 +81,26 @@
                                         @if(\Auth::user()->rol !== "PATIENT")
                                             <td>    {{-- Si el usuario logeado es diferente a paciente y si el usuario objetivo es un paciente o el usuario logeado es admin --}}
                                                     {{-- Permitira actualizar al usuario --}}
+                                                @if(\Auth::user()->rol == "DOCTOR" && $user->rol == "PATIENT")
+                                                    <div class="col-12">
+                                                        <a href="/referenciasPaciente/{{$user->id}}" class="btn btn-sm btn-info mt-2" >Examenes</a>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <a href="/informeMedicoPaciente/{{$user->id}}" class="btn btn-sm btn-info mt-2" >Informes Medicos</a>
+                                                    </div>
+                                                @endif
                                                 @if(\Auth::user()->rol !== "PATIENT" && ($user->rol == "PATIENT" || \Auth::user()->rol == "ADMIN"))
                                                     <div class="col-12">
-                                                        <a href="/update{{ucfirst(strtolower($user->rol))}}/{{$user->id}}" class="btn btn-warning">Actualizar</a>
+                                                        <a href="/update{{ucfirst(strtolower($user->rol))}}/{{$user->id}}" class="btn btn-sm btn-warning mt-2">Actualizar @if($user->rol == "PATIENT") paciente @else usuario @endif</a>
                                                     </div>
                                                     <div class="col-12">
                                                         <form action="/deleteUser" method="post">
                                                             @csrf()
                                                             @method('delete')
                                                             <input type="text" name="user_id" hidden value="{{$user->id}}" id="">
-                                                            <button type="submit" class="btn btn-danger mt-2">Eliminar</button>
+                                                            <button type="submit" class="btn btn-sm btn-danger mt-2">Eliminar @if($user->rol == "PATIENT") paciente @else usuario @endif</button>
                                                         </form>
                                                     </div>
-                                                @endif
-                                                @if(\Auth::user()->rol == "DOCTOR" && ($user->rol == "PATIENT"))
-                                                    <div class="col-12">
-                                                        <a href="/referenciasPaciente/{{$user->id}}" class="btn btn-sm btn-info mt-2" disabled>Examenes</a>
-                                                    </div>
-                                                    {{-- <div class="col-12">
-                                                        <a href="/resultadosExamenesPaciente/{{$user->id}}" class="btn btn-sm btn-info mt-2" disabled>Resultados de examenes</a>
-                                                    </div> --}}
                                                 @endif
                                                 @if(\Auth::user()->rol == "ADMIN" ||  ($user->rol == "PATIENT" && \Auth::user()->rol != "PATIENT"))
                                                     <div class="col-12">
