@@ -139,6 +139,7 @@
 
                 </li>
             @endif
+
             @if (in_array(\Auth::user()->rol, ["ADMIN", "SECRETARY"]))
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNoticias"
@@ -171,7 +172,23 @@
 
                 </li>
             @endif
+            @if(\Auth::user()->rol == "ADMIN")
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAsistencia"
+                        aria-expanded="true" aria-controls="collapseAsistencia">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>Asistencia</span>
+                    </a>
+                    <div id="collapseAsistencia" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            {{-- <h6 class="collapse-header">Custom Components:</h6> --}}
+                            <a class="collapse-item" href="{{url('/asistencia_diaria')}}">Asistencia diaria</a>
+                            <a class="collapse-item" href="{{url('/asistencia_quirofano')}}">Asistencia a quirofano</a>
+                        </div>
+                    </div>
 
+                </li>
+            @endif
             <hr class="sidebar-divider my-2 mb-0">
             <li class="nav-item">
                 <a class="nav-link" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">

@@ -10,12 +10,12 @@ class DoctorHierarchiesSeeder extends Seeder
 
 
     protected $hierarchies = [
-        [ "specialty" => "Ginecobstetra"  ,"hierarchy" => "Interno", "resident" => 0],
-        [ "specialty" => "Ginecobstetra"  ,"hierarchy" => "Artículo 8", "resident" => 0],
-        [ "specialty" => "Ginecobstetra"  ,"hierarchy" => "R1", "resident" => 1],
-        [ "specialty" => "Ginecobstetra"  ,"hierarchy" => "R2", "resident" => 1],
-        [ "specialty" => "Ginecobstetra"  ,"hierarchy" => "R3 ", "resident" => 1],
-        [ "specialty" => "Ginecobstetra"  ,"hierarchy" => "Especialista", "resident" => 1],
+        [ "id" => 1, "specialty" => "Ginecobstetra"  ,"hierarchy" => "Interno", "resident" => 0],
+        [ "id" => 2, "specialty" => "Ginecobstetra"  ,"hierarchy" => "Artículo 8", "resident" => 0],
+        [ "id" => 3, "specialty" => "Ginecobstetra"  ,"hierarchy" => "R1", "resident" => 1],
+        [ "id" => 4, "specialty" => "Ginecobstetra"  ,"hierarchy" => "R2", "resident" => 1],
+        [ "id" => 5, "specialty" => "Ginecobstetra"  ,"hierarchy" => "R3 ", "resident" => 1],
+        [ "id" => 6, "specialty" => "Ginecobstetra"  ,"hierarchy" => "Especialista", "resident" => 1],
     ];
 
 

@@ -38,17 +38,22 @@
                                         <hr>
                                         <p style="max-height: 200px; overflow-y: auto; white-space: pre-wrap;" class="fr-view">{!!$report->report!!}</p>
                                     </td>
-                                    @if(\Auth::user()->rol == "DOCTOR")
-                                        <td>
-                                            <a href="/modificarInformeMedicoPaciente/{{$report->id}}" class="btn btn-warning btn-sm" type="button">Modificar Informe</a>
-                                            <br>
-                                            <form action="/eliminarInformeMedicoPaciente/{{$report->id}}" method="POST" class="mt-2">
-                                                @csrf
-                                                @method("DELETE")
-                                                <button type="submit" class="btn btn-danger btn-sm" >Eliminar</button>
-                                            </form>
-                                        </td>
-                                    @endif
+                                    <td>
+                                        <form action="/descargarInformeMedico" method="POST" target="_blank">
+                                            @csrf
+                                            <input type="text" name="report_id" value="{{$report->id}}" hidden id="">
+                                            <button type="submit" class="btn btn-sm mt-2 btn-primary">Descargar PDF</button>
+                                        </form>
+                                        @if(\Auth::user()->rol == "DOCTOR")
+                                                <a href="/modificarInformeMedicoPaciente/{{$report->id}}" class="btn mt-2 btn-warning btn-sm" type="button">Modificar Informe</a>
+                                                <br>
+                                                <form action="/eliminarInformeMedicoPaciente/{{$report->id}}" method="POST" class="mt-2">
+                                                    @csrf
+                                                    @method("DELETE")
+                                                    <button type="submit" class="btn btn-danger btn-sm" >Eliminar</button>
+                                                </form>
+                                        @endif
+                                    </td>
 
 
                                 </tr>

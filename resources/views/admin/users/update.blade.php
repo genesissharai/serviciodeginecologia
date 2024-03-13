@@ -73,6 +73,13 @@
                             </div>
                         @endif
 
+                        <div class="form-group row form-check">
+                            <div class="col-1">
+                                <input type="checkbox" name="status" value="1" @if($user->status == 1) checked @endif class="form-check-input">
+                                <label for="" class="form-check-label">Activo</label>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             {{-- <div class="col-sm-12 mb-3 mb-sm-0">
                                 <input type="password" class="form-control form-control-user" required

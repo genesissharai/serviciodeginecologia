@@ -14,7 +14,7 @@ class DashboardController extends Controller
             when( ($user->rol == strtoupper("patient")) , function($q) use($user){
                 $q->where('patient_id',$user->id);
             })
-            ->whereNot('status', strtoupper("canceled"))
+            ->where('status', strtoupper("PENDING"))
             ->whereDate('consultation_date', '>=', \Carbon\Carbon::now())
             ->paginate(25);
 

@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('daily_attendance', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('doctor_id');
-            $table->datetime('fecha')->nullable();
+            $table->datetime('attendance_date')->nullable();
 
 
             $table->timestamps();
@@ -27,7 +27,7 @@ return new class extends Migration
         Schema::create('operating_room_attendance', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('doctor_id');
-            $table->datetime('fecha')->nullable();
+            $table->datetime('attendance_date')->nullable();
             $table->timestamps();
         });
 

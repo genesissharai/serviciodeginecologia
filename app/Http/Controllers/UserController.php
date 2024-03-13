@@ -187,6 +187,7 @@ class UserController extends Controller
             $user->doctor_hierarchy_id = $request->doctor_hierarchy_id;
             $user->birthdate = $request->birthdate;
             $user->phone = $request->phone;
+            $user->status = $request->status;
 
             $user->save();
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class MedicalReportController extends Controller
 {
@@ -66,5 +68,12 @@ class MedicalReportController extends Controller
         return view('admin.informe-medico.lista-informes-medicos-paciente', compact('patient','medicalReports','title'));
     }
 
+    public function downloadPDF(Request $request){
+        $report = \App\Models\MedicalReport::find($request->report_id);
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($report->report);
+        return $pdf->stream();
+    }
 
 }

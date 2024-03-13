@@ -6,6 +6,7 @@ use App\Http\Controllers\CitasController;
 use App\Http\Controllers\ReferecesController;
 use App\Http\Controllers\ResultadosExamenesController;
 use App\Http\Controllers\MedicalReportController;
+use App\Http\Controllers\AttendanceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -141,7 +142,7 @@ Route::patch('/marcarCitaNoAtendida', [CitasController::class, 'markAsUnattended
 
 /**
  *
- *  Referencias - Mandar a hacer los examenes
+ *  Referencias y Resultado de examen - Mandar a hacer los examenes
  *
  */
 
@@ -159,9 +160,38 @@ Route::get('/modificarResultadoExamenPaciente/{id}', [ResultadosExamenesControll
 Route::put('/modificarResultadoExamenPaciente/{id}', [ResultadosExamenesController::class, 'update'])->middleware(['auth']);
 Route::delete('/eliminarResultadoExamenPaciente/{id}', [ResultadosExamenesController::class, 'delete'])->middleware(['auth']);
 
+
+/**
+ *
+ *  Informe medico
+ *
+ */
+
+
 Route::get('/informeMedicoPaciente/{id}', [MedicalReportController::class, 'getPatientMedicalReports'])->middleware(['auth']);
 Route::get('/crearInformeMedicoPaciente/{id}', [MedicalReportController::class, 'create'])->middleware(['auth']);
 Route::post('/crearInformeMedicoPaciente/{id}', [MedicalReportController::class, 'store'])->middleware(['auth']);
+Route::post('/descargarInformeMedico', [MedicalReportController::class, 'downloadPDF'])->middleware(['auth']);
 Route::get('/modificarInformeMedicoPaciente/{id}', [MedicalReportController::class, 'updateView'])->middleware(['auth']);
 Route::put('/modificarInformeMedicoPaciente/{id}', [MedicalReportController::class, 'update'])->middleware(['auth']);
 Route::delete('/eliminarInformeMedicoPaciente/{id}', [MedicalReportController::class, 'delete'])->middleware(['auth']);
+
+
+/**
+ *
+ * Control de asistencias
+ *
+ */
+
+Route::get('asistencia_diaria', [AttendanceController::class,'dailyAttendanceView'])->middleware(['auth']);
+Route::post('asistencia_diaria', [AttendanceController::class,'storeDailyAttendance'])->middleware(['auth']);
+Route::delete('asistencia_diaria', [AttendanceController::class,'deleteDailyAttendance'])->middleware(['auth']);
+// Route::put('asistencia_diaria', [AttendanceController::class,''])->middleware(['auth']);
+
+Route::get('asistencia_quirofano', [AttendanceController::class,'operatingRoomAttendanceView'])->middleware(['auth']);
+Route::post('asistencia_quirofano', [AttendanceController::class,'storeOperatingRoomAttendance'])->middleware(['auth']);
+Route::delete('asistencia_quirofano', [AttendanceController::class,'deleteOperatingRoomAttendance'])->middleware(['auth']);
+// Route::put('asistencia_quirofano', [AttendanceController::class,''])->middleware(['auth']);
+
+
+

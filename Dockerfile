@@ -63,3 +63,5 @@ ARG uid
 RUN useradd -G www-data,root -u $uid -d /home/dev dev
 RUN mkdir -p /home/dev/.composer && \
     chown -R dev:dev /home/dev
+
+RUN docker-php-ext-install gd

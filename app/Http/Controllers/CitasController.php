@@ -80,6 +80,8 @@ class CitasController extends Controller
     }
 
     public function selectDoctorForAvailabilityPlanning(Request $request){
+        $searchTerms = $request->input();
+
         // SI ES PACIENTE NEGARLE PERMISOS
         if(\Auth::user()->rol == "PATIENT"){
             return redirect('/forbidden');
@@ -89,25 +91,55 @@ class CitasController extends Controller
             return redirect(url('/agendarDisponibilidad/'.\Auth::id()));
         }
         $doctor = User::find($request->id);
-        $doctor_list = User::where('rol','DOCTOR')->orderBy('name','ASC')->orderBy('last_name','ASC')->where('status', 1)->paginate(100);
+        $doctor_list = User::where('rol','DOCTOR')
+        ->when(($request->name), function($q) use($request){
+            $q->where(function($q2) use($request){
+                $q2->where("name", "like", "%$request->name%")
+                    ->orWhere("last_name", "like", "%$request->name%");
+            });
+        })
+        ->when(($request->email), function($q) use($request){
+            $q->where("email", $request->email);
+        })
+        ->whereHas('doctorHierarchy', function($q){
+            $q->where('doctor_hierarchies.id', 6); // 6 => Especialista
+        })
+        ->orderBy('name','ASC')->orderBy('last_name','ASC')->where('status', 1)->paginate(100);
 
         return view('admin.citas.seleccionar-doctor-para-agendar-disponibilidad', [
             'title' => "Seleccione al medico",
-            'doctor_list' => $doctor_list
+            'doctor_list' => $doctor_list,
+            'searchTerms' => $searchTerms,
         ]);
     }
 
     public function selectDoctorDateScheduling(Request $request){
+        $searchTerms = $request->input();
+
         $doctor = User::find($request->id);
         // SI ES DOCTOR ENTRAR DIRECTAMENTE A AGENDAR CITA PARA EL
         if(\Auth::user()->rol == "DOCTOR" ){
             return redirect(url('/agendarCita/'.\Auth::id() ) );
         }
-        $doctor_list = User::where('rol','DOCTOR')->orderBy('name','ASC')->orderBy('last_name','ASC')->where('status', 1)->paginate(100);
+        $doctor_list = User::where('rol','DOCTOR')
+        ->when(($request->name), function($q) use($request){
+            $q->where(function($q2) use($request){
+                $q2->where("name", "like", "%$request->name%")
+                    ->orWhere("last_name", "like", "%$request->name%");
+            });
+        })
+        ->when(($request->email), function($q) use($request){
+            $q->where("email", $request->email);
+        })
+        ->whereHas('doctorHierarchy', function($q){
+            $q->where('doctor_hierarchies.id', 6); // 6 => Especialista
+        })
+        ->orderBy('name','ASC')->orderBy('last_name','ASC')->where('status', 1)->paginate(100);
 
         return view('admin.citas.seleccionar-doctor-para-agendar-cita', [
             'title' => "Seleccione al medico",
-            'doctor_list' => $doctor_list
+            'doctor_list' => $doctor_list,
+            'searchTerms' => $searchTerms,
         ]);
     }
 
