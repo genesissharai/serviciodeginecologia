@@ -18,9 +18,7 @@
                             {{-- <th style="width: 10%;">Fecha de consulta</th> --}}
                             <th style="width: 10%;">Elaborado por</th>
                             <th style="width: 60%;">Informacion del informe medico</th>
-                            @if(\Auth::user()->rol == "DOCTOR")
-                                <th>{{-- Acciones --}}</th>
-                            @endif
+                            <th>{{-- Acciones --}}</th>
 
                         </thead>
 

@@ -89,12 +89,12 @@
 
             @if(\Auth::user()->rol == "PATIENT")
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url('/referenciasPaciente/'.\Auth::id())}}">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Referencias</span></a>
-                    <a class="nav-link" href="{{url('/ExamenesPaciente/'.\Auth::id())}}">
+                    <a class="nav-link" href="{{url('/examenesPaciente/'.\Auth::id())}}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Examenes</span></a>
+                    <a class="nav-link" href="{{url('/informeMedicoPaciente/'.\Auth::id())}}">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Informes médicos</span></a>
                 </li>
             @endif
 

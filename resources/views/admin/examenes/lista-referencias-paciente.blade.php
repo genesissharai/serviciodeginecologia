@@ -16,7 +16,7 @@
                         <thead>
                             <th style="width: 10%;">Fecha creado</th>
                             <th style="width: 10%;">Mandado por</th>
-                            <th style="width: 30%;">Referencia</th>
+                            <th style="width: 30%;">Examen mandado</th>
                             <th style="width: 30%;">Resultado</th>
                             @if(\Auth::user()->rol == "DOCTOR")
                                 <th>{{-- Acciones --}}</th>

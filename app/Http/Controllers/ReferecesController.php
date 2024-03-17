@@ -59,7 +59,7 @@ class ReferecesController extends Controller
         if(\Auth::user()->rol == "PATIENT" && \Auth::id() != $request->id)
             return redirect('forbidden');
         $patient = \App\Models\User::find($request->id);
-        $title = "Referencias mandados";
+        $title = "Examenes mandados";
         $references = \App\Models\Reference::where('patient_id', $patient->id)->orderBy('created_at','DESC')->paginate(25);
         return view('admin.examenes.lista-referencias-paciente', compact('patient','references','title'));
     }

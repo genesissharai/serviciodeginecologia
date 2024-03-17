@@ -72,7 +72,7 @@ class MedicalReportController extends Controller
         $report = \App\Models\MedicalReport::find($request->report_id);
 
         $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($report->report);
+        $pdf->loadHTML('<h1>'.$report->title.'</h1><hr>'.$report->report);
         return $pdf->stream();
     }
 
