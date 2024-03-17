@@ -153,7 +153,7 @@ Route::get('/modificarReferenciaPaciente/{id}', [ReferecesController::class, 'up
 Route::put('/modificarReferenciaPaciente/{id}', [ReferecesController::class, 'update'])->middleware(['auth']);
 Route::delete('/eliminarReferenciaPaciente/{id}', [ReferecesController::class, 'delete'])->middleware(['auth']);
 
-Route::get('/examenesPaciente/{id}', [ResultadosExamenesController::class, 'getPatientReferences'])->middleware(['auth']);
+Route::get('/examenesPaciente/{id}', [ReferecesController::class, 'getPatientReferences'])->middleware(['auth']);
 
 Route::get('/registrarResultadoExamenPaciente/{id}', [ResultadosExamenesController::class, 'create'])->middleware(['auth']);
 Route::post('/registrarResultadoExamenPaciente/{id}', [ResultadosExamenesController::class, 'store'])->middleware(['auth']);

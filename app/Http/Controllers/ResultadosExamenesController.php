@@ -63,14 +63,6 @@ class ResultadosExamenesController extends Controller
         return redirect("/referenciasPaciente/".$patient_id);
     }
 
-    public function getPatientReferences(Request $request){
-        if(\Auth::user()->rol == "PATIENT" && \Auth::id() != $request->id)
-            return redirect('forbidden');
-        $patient = \App\Models\User::find($request->id);
-        $title = "Referencias mandados";
-        $references = \App\Models\Reference::where('patient_id', $patient->id)->orderBy('created_at','DESC')->paginate(25);
-        return view('admin.examenes.lista-referencias-paciente', compact('patient','references','title'));
-    }
 
 
 }
