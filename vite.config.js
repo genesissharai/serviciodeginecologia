@@ -27,7 +27,7 @@ export default defineConfig({
                 "resources/img/foto-hospital-raul-leoni-8.jpeg",
                 'resources/vendor/jquery/jquery.min.js',
                 'resources/vendor/jquery-easing/jquery.easing.min.js',
-                'resources/js/citas.js',
+                'resources/js/historia-clinica.js',
                 'resources/vendor/bootstrap/js/bootstrap.bundle.min.js',
                 'resources/vendor/ckeditor5-build-classic/ckeditor.js',
                 'resources/js/sb-admin-2.min.js',

@@ -47,3 +47,4 @@ import swal from 'sweetalert';
 window.swal = swal
 function genericError(){swal({text: "Ha ocurrido un error. \nComuniquese con el administrador", icon:"warning"})}
 window.genericError = genericError
+

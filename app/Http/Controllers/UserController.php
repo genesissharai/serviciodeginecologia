@@ -129,6 +129,7 @@ class UserController extends Controller
 
             if($userRol == "PATIENT"){
                 \DB::table('gynecological_clinical_history')->insert(["user_id" => $user->id]);
+                \DB::table('medical_history')->insert(["patient_id" => $user->id]);
             }
 
             event(new Registered($user));

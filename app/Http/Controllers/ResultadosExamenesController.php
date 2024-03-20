@@ -11,7 +11,7 @@ class ResultadosExamenesController extends Controller
     public function store(Request $request){
         $reference = \App\Models\Reference::find($request->id);
         $patient = \App\Models\User::find($reference->patient_id);
-        $clinical_history = \DB::table('gynecological_clinical_history')->where('user_id',$patient->id)->first();
+        $clinical_history = \DB::table('medical_history')->where('user_id',$patient->id)->first();
         $examResult = new \App\Models\ExamResult;
         $examResult->doctor_id = \Auth::id();
         $examResult->reference_id = $reference->id;

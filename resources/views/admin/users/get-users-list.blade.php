@@ -88,6 +88,9 @@
                                                     <div class="col-12">
                                                         <a href="/informeMedicoPaciente/{{$user->id}}" class="btn btn-sm btn-info mt-2" >Informes Medicos</a>
                                                     </div>
+                                                    <div class="col-12">
+                                                        <a href="/historiaClinicaPaciente/{{$user->id}}" class="btn btn-sm btn-info mt-2" >Historia Clinica</a>
+                                                    </div>
                                                 @endif
                                                 @if(\Auth::user()->rol !== "PATIENT" && ($user->rol == "PATIENT" || \Auth::user()->rol == "ADMIN"))
                                                     <div class="col-12">
