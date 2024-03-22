@@ -102,7 +102,7 @@ class CitasController extends Controller
             $q->where("email", $request->email);
         })
         ->whereHas('doctorHierarchy', function($q){
-            $q->where('doctor_hierarchies.id', 6); // 6 => Especialista
+            $q->where('doctor_hierarchies.hierarchy', 'Especialista'); // 6 => Especialista
         })
         ->orderBy('name','ASC')->orderBy('last_name','ASC')->where('status', 1)->paginate(100);
 
@@ -132,7 +132,7 @@ class CitasController extends Controller
             $q->where("email", $request->email);
         })
         ->whereHas('doctorHierarchy', function($q){
-            $q->where('doctor_hierarchies.id', 6); // 6 => Especialista
+            $q->where('doctor_hierarchies.hierarchy', 'Especialista'); // 6 => Especialista
         })
         ->orderBy('name','ASC')->orderBy('last_name','ASC')->where('status', 1)->paginate(100);
 
