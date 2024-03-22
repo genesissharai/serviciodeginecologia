@@ -58,7 +58,7 @@
                                     <th>Especialidad</th>
                                     <th>Jerarquia</th>
                                 @endif
-                                @if((\Auth::user()->rol == "DOCTOR") || ($rol == "DOCTOR" && \Auth::user()->rol == "ADMIN"))
+                                @if($rol == "DOCTOR")
                                     <th>Asistencias a quirofano</th>
                                 @endif
                                 <th>Estatus</th>
@@ -80,7 +80,7 @@
                                             <td>{{$user->doctorHierarchy->specialty ?? ''}}</td>
                                             <td>{{$user->doctorHierarchy->hierarchy ?? ''}}</td>
                                         @endif
-                                        @if((\Auth::user()->rol == "DOCTOR") || ($rol == "DOCTOR" && $user->doctorHierarchy->resident == 1 && \Auth::user()->rol == "ADMIN"))
+                                        @if($rol == "DOCTOR" && $user->doctorHierarchy)
                                             @if($user->doctorHierarchy->resident == 1)
                                                 <td>{{$user->operatingRoomAttendanceQuantity() ?? 0}}</td>
                                             @else
