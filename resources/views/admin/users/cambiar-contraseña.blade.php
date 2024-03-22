@@ -6,6 +6,7 @@
         <div class="col-12">
             <div class="card p-3">
                 <form action="/changeUserPassword" method="post">
+                    @csrf
                     @method('patch')
                     <input type="text" name="user_id" id="" value="{{$user->id}}" hidden>
                     <div class="mb-3">

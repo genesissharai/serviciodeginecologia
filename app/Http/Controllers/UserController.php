@@ -304,7 +304,7 @@ class UserController extends Controller
     }
 
     public function changeUserPassword(Request $request){
-        $request->validate($request, [
+        $request->validate([
             'user_id' => 'required',
             'password' => 'min:4|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'min:4'
@@ -318,10 +318,10 @@ class UserController extends Controller
         session()->flash("success", "Contraseña de usuario actualizada con exito");
 
         if(\Auth::user()->rol != "PATIENT"){
-            if($userRol == "PATIENT") $urlBack = "/getPatients";
-            if($userRol == "DOCTOR") $urlBack = "/getDoctors";
-            if($userRol == "SECRETARY") $urlBack = "/getSecretaries";
-            if($userRol == "ADMIN") $urlBack = "/getAdmins";
+            if($user->rol == "PATIENT") $action = "/getPatients";
+            if($user->rol == "DOCTOR") $action = "/getDoctors";
+            if($user->rol == "SECRETARY") $action = "/getSecretaries";
+            if($user->rol == "ADMIN") $action = "/getAdmins";
             return redirect($action);
         }
         return redirect('/dashboard');
