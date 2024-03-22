@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CitasController;
 use App\Http\Controllers\ReferecesController;
 use App\Http\Controllers\ResultadosExamenesController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\MedicalReportController;
 use App\Http\Controllers\MedicalHistoryController;
 use App\Http\Controllers\AttendanceController;
@@ -201,3 +202,5 @@ Route::delete('asistencia_quirofano', [AttendanceController::class,'deleteOperat
 
 Route::get('/historiaClinicaPaciente/{id}', [MedicalHistoryController::class, 'updateView'])->middleware(['auth']);
 Route::put('/historiaClinicaPaciente', [MedicalHistoryController::class, 'update'])->middleware(['auth']);
+
+Route::get('/estadisticas', [StatisticsController::class, 'getGeneralStatistics'])->middleware(['auth']);

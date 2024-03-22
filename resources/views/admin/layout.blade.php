@@ -189,6 +189,14 @@
 
                 </li>
             @endif
+            @if(\Auth::user()->rol != "PATIENT")
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url('/estadisticas')}}">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Estadisticas</span></a>
+                </li>
+            @endif
+
             <hr class="sidebar-divider my-2 mb-0">
             <li class="nav-item">
                 <a class="nav-link" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">

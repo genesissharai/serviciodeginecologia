@@ -58,6 +58,9 @@
                                     <th>Especialidad</th>
                                     <th>Jerarquia</th>
                                 @endif
+                                @if((\Auth::user()->rol == "DOCTOR") || ($rol == "DOCTOR" && \Auth::user()->rol == "ADMIN"))
+                                    <th>Asistencias a quirofano</th>
+                                @endif
                                 <th>Estatus</th>
                                 @if(\Auth::user()->rol !== "PATIENT")
                                     <th>Acciones</th>
@@ -76,6 +79,13 @@
                                         @if($rol == "DOCTOR")
                                             <td>{{$user->doctorHierarchy->specialty ?? ''}}</td>
                                             <td>{{$user->doctorHierarchy->hierarchy ?? ''}}</td>
+                                        @endif
+                                        @if((\Auth::user()->rol == "DOCTOR") || ($rol == "DOCTOR" && $user->doctorHierarchy->resident == 1 && \Auth::user()->rol == "ADMIN"))
+                                            @if($user->doctorHierarchy->resident == 1)
+                                                <td>{{$user->operatingRoomAttendanceQuantity() ?? 0}}</td>
+                                            @else
+                                                <td>NO APLICA</td>
+                                            @endif
                                         @endif
                                         <td>@if($user->status)Activo @else Inactivo @endif</td>
                                         @if(\Auth::user()->rol !== "PATIENT")

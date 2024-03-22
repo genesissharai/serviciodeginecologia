@@ -73,6 +73,7 @@ class User extends Authenticatable
         return $this->belongsTo(DoctorHierarchy::class, 'doctor_hierarchy_id');
     }
 
-
-
+    public function operatingRoomAttendanceQuantity(){
+        return $this->hasMany(OperatingRoomAttendance::class, 'doctor_id')->where('type', strtoupper("operating_room_attendance"))->count();
+    }
 }
