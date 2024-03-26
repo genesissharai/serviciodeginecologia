@@ -99,7 +99,7 @@ class CitasController extends Controller
             });
         })
         ->when(($request->email), function($q) use($request){
-            $q->where("email", $request->email);
+            $q->where("email", "like",  "%$request->email%");
         })
         ->whereHas('doctorHierarchy', function($q){
             $q->where('doctor_hierarchies.hierarchy', 'Especialista'); // 6 => Especialista
@@ -129,7 +129,7 @@ class CitasController extends Controller
             });
         })
         ->when(($request->email), function($q) use($request){
-            $q->where("email", $request->email);
+            $q->where("email", "like", "%$request->email%");
         })
         ->whereHas('doctorHierarchy', function($q){
             $q->where('doctor_hierarchies.hierarchy', 'Especialista'); // 6 => Especialista

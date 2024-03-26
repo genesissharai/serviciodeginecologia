@@ -276,10 +276,10 @@ class UserController extends Controller
                 });
             })
             ->when(($request->email), function($q) use($request){
-                $q->where("email", $request->email);
+                $q->where("email","like", "%$request->email%");
             })
             ->when(($request->ci), function($q) use($request){
-                $q->where("ci", $request->ci);
+                $q->where("ci","like", "%$request->ci%");
             })
             ->when(($request->doctor_hierarchy_id), function($q) use($request){
                 $q->whereHas('doctorHierarchy',function($q2) use($request){

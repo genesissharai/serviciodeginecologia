@@ -34,12 +34,12 @@ class AttendanceController extends Controller
             })
             ->when(($request->email), function($q) use($request){
                 $q->whereHas('doctor', function($q2)  use($request){
-                    $q2->where("email", $request->email);
+                    $q2->where("email", "like", "%$request->email%");
                 });
             })
             ->when(($request->ci), function($q) use($request){
                 $q->whereHas('doctor', function($q2)  use($request){
-                    $q2->where("ci", $request->ci);
+                    $q2->where("ci","like", "%$request->ci%");
                 });
             })
             ->when(($request->doctor_hierarchy_id), function($q) use($request){
@@ -91,12 +91,12 @@ class AttendanceController extends Controller
             })
             ->when(($request->email), function($q) use($request){
                 $q->whereHas('doctor', function($q2)  use($request){
-                    $q2->where("email", $request->email);
+                    $q2->where("email", "like", "%$request->email%");
                 });
             })
             ->when(($request->ci), function($q) use($request){
                 $q->whereHas('doctor', function($q2)  use($request){
-                    $q2->where("ci", $request->ci);
+                    $q2->where("ci","like", "%$request->ci%");
                 });
             })
             ->when(($request->doctor_hierarchy_id), function($q) use($request){
